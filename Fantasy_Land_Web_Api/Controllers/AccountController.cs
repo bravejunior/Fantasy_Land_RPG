@@ -23,20 +23,21 @@ namespace Fantasy_Land_Web_Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserRegisterViewModel registerViewModel)
+        public async Task<IActionResult> Register(UserRegisterViewModel viewModel)
         {
 
             if (ModelState.IsValid)
             {
                 User user = new User();
 
-                user.FirstName = registerViewModel.FirstName;
-                user.LastName = registerViewModel.LastName;
-                user.Gender = registerViewModel.Gender;
-                user.UserName = registerViewModel.Username;
-                user.IsPrivate = registerViewModel.IsPrivate;
+                user.FirstName = viewModel.FirstName;
+                user.LastName = viewModel.LastName;
+                user.Gender = viewModel.Gender;
+                user.UserName = viewModel.Username;
+                user.IsPrivate = viewModel.IsPrivate;
+                user.RememberMe = viewModel.RememberMe;
 
-                var result = await _userManager.CreateAsync(user, registerViewModel.Password);
+                var result = await _userManager.CreateAsync(user, viewModel.Password);
 
                 if (result.Succeeded)
                 {
@@ -58,20 +59,27 @@ namespace Fantasy_Land_Web_Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LogIn(LoginViewModel loginViewModel)
+        public async Task<IActionResult> LogIn(UserLoginViewModel viewModel)
         {
+
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(loginViewModel.Username, loginViewModel.Password, isPersistent: true, lockoutOnFailure: false);
+                //fixa ispersistent beroende på vad usern har valt
+                var result = await _signInManager.PasswordSignInAsync(viewModel.Username, viewModel.Password, isPersistent: true, lockoutOnFailure: false);
+
 
                 if (result.Succeeded)
                 {
                     return Ok(result.Succeeded);
                 }
 
-            }
+                return BadRequest(result.ToString());
 
-            return BadRequest("Something went wrong");
+            }
+            else
+            {
+                return BadRequest("Something went wrong");
+            }
         }
     }
 }

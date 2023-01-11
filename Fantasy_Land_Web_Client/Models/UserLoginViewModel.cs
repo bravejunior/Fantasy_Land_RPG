@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Fantasy_Land_Web_Api.Models
+namespace Fantasy_Land_Web_Client.Models
 {
-    public class LoginViewModel
+    public class UserLoginViewModel
     {
         [Required(ErrorMessage = "Username can't be empty.")]
         [StringLength(20)]

@@ -10,6 +10,8 @@ namespace Fantasy_Land_Web_Api.Models
 
         public string Gender { get; set; }
 
+        public bool RememberMe { get; set; }
+
         public bool IsPrivate { get; set; }
     }
 }

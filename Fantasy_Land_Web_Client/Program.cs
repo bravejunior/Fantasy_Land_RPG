@@ -9,6 +9,15 @@ namespace Fantasy_Land_Web_Client
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+            HttpClient client = new HttpClient(clientHandler);
+            client.BaseAddress = new Uri("https://localhost:7290/api");
+
+            builder.Services.AddSingleton<HttpClient>(client);
+
+
             var app = builder.Build();
 
 
@@ -20,15 +29,6 @@ namespace Fantasy_Land_Web_Client
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            HttpClientHandler clientHandler = new HttpClientHandler();
-            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-
-            HttpClient client = new HttpClient(clientHandler);
-            client.BaseAddress = new Uri("https://localhost:7290/api");
-
-            builder.Services.AddSingleton<HttpClient>(client);
-
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
