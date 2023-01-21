@@ -11,5 +11,7 @@ namespace Fantasy_Land_Web_Client.Models
         [Required(ErrorMessage = "Password can't be empty.")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        public bool RememberMe { get; set; } = true;
     }
 }
