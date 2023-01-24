@@ -13,7 +13,7 @@ namespace Fantasy_Land_Web_Client.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index() //Test if token works
         {
             return View();
         }

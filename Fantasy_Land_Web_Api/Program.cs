@@ -1,7 +1,11 @@
+using Fantasy_Land_Web_Api.Configurations;
 using Fantasy_Land_Web_Api.Context;
 using Fantasy_Land_Web_Api.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Fantasy_Land_Web_Api
 {
@@ -20,6 +24,31 @@ namespace Fantasy_Land_Web_Api
 
             builder.Services.AddDbContext<FantasyLandDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
 
+            builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(key: "JwtConfig")); //dependency injection container -hämtar secret från appsettings?
+
+
+            builder.Services.AddAuthentication(configureOptions: options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(jwt =>
+                {
+                    var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection(key: "JwtConfig:Secret").Value);
+
+                    jwt.SaveToken = true;
+                    jwt.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,          //false för development, kan bli strul i dev environment
+                        ValidateAudience = false,        //false för development, kan bli strul i dev environment
+                        RequireExpirationTime = false,    //false för development, kan bli strul i dev environment - uppdatera när refresh token finns
+                        ValidateLifetime = true
+                    };
+                });
+
             builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<FantasyLandDbContext>();
 
@@ -34,8 +63,10 @@ namespace Fantasy_Land_Web_Api
                 options.Password.RequiredUniqueChars = 1;
             });
 
-            builder.Services.AddSwaggerGen();
-
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.EnableAnnotations();
+            });
 
             var app = builder.Build();
 
@@ -51,6 +82,7 @@ namespace Fantasy_Land_Web_Api
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.MapControllers();
 

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Fantasy_Land_Web_Client.Models;
 using System.Text.Json;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Fantasy_Land_Web_Client.Controllers
 {
@@ -37,7 +39,20 @@ namespace Fantasy_Land_Web_Client.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return View("Login");
+                    var authResponse = response.Content.ReadAsStringAsync().Result;
+
+                    int startIndex = authResponse.IndexOf("\"token\":\"") + "\"token\":\"".Length;
+                    int endIndex = authResponse.IndexOf("\",\"result\":");
+                    string token = authResponse.Substring(startIndex, endIndex - startIndex);
+
+                    Response.Cookies.Append(Constants.XAccessToken, token, new CookieOptions()
+                    {
+                        HttpOnly = true,
+                        SameSite = SameSiteMode.Strict
+                    });
+
+                    return View("Index", "Home");
+
                 }
                 else
                 {
@@ -83,6 +98,19 @@ namespace Fantasy_Land_Web_Client.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
+
+                    var authResponse = response.Content.ReadAsStringAsync().Result;
+
+                    int startIndex = authResponse.IndexOf("\"token\":\"") + "\"token\":\"".Length;
+                    int endIndex = authResponse.IndexOf("\",\"result\":");
+                    string token = authResponse.Substring(startIndex, endIndex - startIndex);
+
+                    Response.Cookies.Append(Constants.XAccessToken, token, new CookieOptions()
+                    {
+                        HttpOnly = true,
+                        SameSite = SameSiteMode.Strict
+                    });
+
                     return RedirectToAction("Index", "Home");
                 }
                 else
