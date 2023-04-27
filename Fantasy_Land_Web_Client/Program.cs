@@ -1,3 +1,6 @@
+using Fantasy_Land_Web_Client.Configurations;
+using System.Net.Http.Headers;
+
 namespace Fantasy_Land_Web_Client
 {
     public class Program
@@ -17,6 +20,9 @@ namespace Fantasy_Land_Web_Client
 
             builder.Services.AddSingleton<HttpClient>(client);
 
+            var secret = Environment.GetEnvironmentVariable("FANTASY_LAND_SECRET");
+
+            builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(key: secret));
 
             var app = builder.Build();
 

@@ -1,8 +1,14 @@
-﻿using Fantasy_Land_Web_Api.Context;
+﻿using Fantasy_Land_Web_Api.Configurations;
+using Fantasy_Land_Web_Api.Context;
 using Fantasy_Land_Web_Api.Models;
+using Fantasy_Land_Web_Api.Models.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Fantasy_Land_Web_Api.Controllers
 {
@@ -10,76 +16,185 @@ namespace Fantasy_Land_Web_Api.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private SignInManager<User> _signInManager;
-        private FantasyLandDbContext _dbContext;
-        private UserManager<User> _userManager;
+        private readonly UserManager<User> _userManager;
+        private readonly FantasyLandDbContext _dbContext;
+        private readonly IConfiguration _configuration;
 
-
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, FantasyLandDbContext dbContext)
+        public AccountController(UserManager<User> userManager, FantasyLandDbContext dbContext, IConfiguration configuration)
         {
-            this._signInManager = signInManager;
             this._userManager = userManager;
-            _dbContext = dbContext;
+            this._dbContext = dbContext;
+            this._configuration = configuration;
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(UserRegisterViewModel viewModel)
+
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] UserLoginRequestDto requestDto)
         {
+            if (ModelState.IsValid)
+            {
+                //Check if user exist
+
+                var existing_user = _userManager.Users.FirstOrDefault(p => p.UserName.Equals(requestDto.Username));
+
+                if (existing_user == null)
+                {
+                    return BadRequest(new AuthResult()
+                    {
+                        Errors = new List<string>()
+                        {
+                            "Invalid payload"
+                        },
+                        Result = false
+                    });
+
+                }
+
+
+                var isCorrect = await _userManager.CheckPasswordAsync(existing_user, requestDto.Password);
+
+
+                if (!isCorrect)
+                {
+                    return BadRequest(new AuthResult()
+                    {
+                        Errors = new List<string>()
+                            {
+                                "Invalid credentials"
+                            },
+                        Result = false
+                    });
+                }
+
+                GenerateJwtToken(existing_user);
+
+                return Ok(new AuthResult()
+                {
+                    Result = true
+                });
+
+            }
+
+            return BadRequest(new AuthResult()
+            {
+                Errors = new List<string>()
+                {
+                    "Invalid payload"
+                },
+                Result = false
+            });
+        }
+
+
+        [HttpPost]
+        [Route("Register")]
+        public async Task<IActionResult> Register([FromBody] UserRegistrationRequestDto requestDto)
+        {
+            //Validate incoming request
 
             if (ModelState.IsValid)
             {
-                User user = new User();
+                //check if username already exists
+                var user_exist = _dbContext.Users.FirstOrDefault(p => p.UserName.Equals(requestDto.Username));
 
-                user.FirstName = viewModel.FirstName;
-                user.LastName = viewModel.LastName;
-                user.Gender = viewModel.Gender;
-                user.UserName = viewModel.Username;
-                user.IsPrivate = viewModel.IsPrivate;
-                user.RememberMe = viewModel.RememberMe;
-
-                var result = await _userManager.CreateAsync(user, viewModel.Password);
-
-                if (result.Succeeded)
+                if (user_exist != null)
                 {
-                    _dbContext.Users.Add(user);
-                    return Ok(user);
+                    return BadRequest(error: new AuthResult()
+                    {
+                        Result = false,
+                        Errors = new List<string>()
+                        {
+                            "Username already exist"
+                        }
+                    });
                 }
 
-                else
+                //create user
+
+                var new_user = new User()
                 {
-                    return BadRequest(result.Errors);
+
+                    FirstName = requestDto.FirstName,
+                    LastName = requestDto.LastName,
+                    Gender = requestDto.Gender,
+                    UserName = requestDto.Username,
+                    IsPrivate = requestDto.IsPrivate,
+                    RememberMe = requestDto.RememberMe
+                };
+
+                var is_created = await _userManager.CreateAsync(new_user, requestDto.Password);
+
+                if (is_created.Succeeded)
+                {
+                    //Generate token
+
+                    AuthResult authResult = GenerateJwtToken(new_user);
+
+
+                    _dbContext.Users.Add(new_user);
+                    return Ok(new AuthResult()
+                    {
+                        Result = true,
+                        Errors = null,
+                        Token = authResult.Token,
+                        Username = authResult.Username
+                    });
                 }
-            }
-            else
-            {
-                return BadRequest("Not able to register, please try again.");
+
+                return BadRequest(new AuthResult()
+                {
+                    Errors = new List<string>()
+                        {
+                            "Server error"
+                        },
+                    Result = false
+                });
             }
 
-            _dbContext.SaveChanges();
+            return BadRequest();
+
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> LogIn(UserLoginViewModel viewModel)
+
+        private AuthResult GenerateJwtToken(User user)
         {
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+            var secret = Environment.GetEnvironmentVariable("FANTASY_LAND_SECRET");
+            var key = Encoding.UTF8.GetBytes(secret);
 
-            if (ModelState.IsValid)
+            //Token descriptor
+
+            var tokenDescriptor = new SecurityTokenDescriptor()
             {
-                //fixa ispersistent beroende på vad usern har valt
-                var result = await _signInManager.PasswordSignInAsync(viewModel.Username, viewModel.Password, isPersistent: true, lockoutOnFailure: false);
-
-
-                if (result.Succeeded)
+                Subject = new ClaimsIdentity(new[]
                 {
-                    return Ok(result.Succeeded);
-                }
+                    new Claim(type:"Id", value:user.Id),
+                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
+                    new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
+                }),
 
-                return BadRequest(result.ToString());
+                Expires = DateTime.Now.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
 
-            }
-            else
+            };
+
+            var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+            var jwtToken = jwtTokenHandler.WriteToken(token);
+
+            HttpContext.Response.Cookies.Append(Constants.XAccessToken, jwtToken, new CookieOptions()
             {
-                return BadRequest("Something went wrong");
-            }
+                Expires = DateTime.Now.AddDays(7),
+                HttpOnly = true,
+                Secure = true,
+                IsEssential = true,
+                SameSite = SameSiteMode.Strict
+            });
+
+            return new AuthResult { Token = jwtToken, Username = user.UserName };
         }
     }
 }

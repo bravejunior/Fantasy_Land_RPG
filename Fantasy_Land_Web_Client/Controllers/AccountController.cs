@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Fantasy_Land_Web_Client.Models;
 using System.Text.Json;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Newtonsoft.Json;
 
 namespace Fantasy_Land_Web_Client.Controllers
 {
@@ -19,6 +22,15 @@ namespace Fantasy_Land_Web_Client.Controllers
             return View();
         }
 
+        public IEnumerable<Claim> ExtractClaims(string jwtToken)
+        {
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityToken securityToken = (JwtSecurityToken)tokenHandler.ReadToken(jwtToken);
+            IEnumerable<Claim> claims = securityToken.Claims;
+
+            return claims;
+        }
+
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterViewModel viewModel)
         {
@@ -30,14 +42,27 @@ namespace Fantasy_Land_Web_Client.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                string data = JsonSerializer.Serialize(viewModel, options);
+                string data = System.Text.Json.JsonSerializer.Serialize(viewModel, options);
                 var contentData = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await _httpclient.PostAsync($"api/account/register", contentData);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return View("Login");
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<AuthResult>(responseContent);
+                    string token = result.Token;
+
+                    CreateTokenCookie(token);
+
+
+                    //var token = HttpContext.Request.Cookies[Constants.XAccessToken];
+                    var claims = ExtractClaims(token);
+
+
+
+                    return RedirectToAction("Index", "Home");
+
                 }
                 else
                 {
@@ -63,6 +88,20 @@ namespace Fantasy_Land_Web_Client.Controllers
             return View();
         }
 
+        [HttpPost]
+        private void CreateTokenCookie(string token)
+        {
+            HttpContext.Response.Cookies.Append(Constants.XAccessToken, token, new CookieOptions()
+            {
+                Expires = DateTime.Now.AddDays(7),
+                HttpOnly = true,
+                Secure = true,
+                IsEssential = true,
+                SameSite = SameSiteMode.Strict
+            });
+
+        }
+
 
 
         [HttpPost]
@@ -76,13 +115,17 @@ namespace Fantasy_Land_Web_Client.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
-                string data = JsonSerializer.Serialize(viewModel, options);
+                string data = System.Text.Json.JsonSerializer.Serialize(viewModel, options);
                 var contentData = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response = await _httpclient.PostAsync($"api/account/login", contentData);
 
+
                 if (response.IsSuccessStatusCode)
                 {
+                    var token = HttpContext.Request.Cookies[Constants.XAccessToken];
+                    var claims = ExtractClaims(token);
+
                     return RedirectToAction("Index", "Home");
                 }
                 else
