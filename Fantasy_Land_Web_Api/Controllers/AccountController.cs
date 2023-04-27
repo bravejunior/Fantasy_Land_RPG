@@ -67,17 +67,14 @@ namespace Fantasy_Land_Web_Api.Controllers
                     });
                 }
 
-                var jwtToken = GenerateJwtToken(existing_user);
+                GenerateJwtToken(existing_user);
 
                 return Ok(new AuthResult()
                 {
-                    Token = jwtToken.Token,
                     Result = true
                 });
 
             }
-
-
 
             return BadRequest(new AuthResult()
             {
@@ -132,13 +129,16 @@ namespace Fantasy_Land_Web_Api.Controllers
                 {
                     //Generate token
 
-                    var token = GenerateJwtToken(new_user);
+                    AuthResult authResult = GenerateJwtToken(new_user);
+
 
                     _dbContext.Users.Add(new_user);
                     return Ok(new AuthResult()
                     {
                         Result = true,
-                        Token = token.Token
+                        Errors = null,
+                        Token = authResult.Token,
+                        Username = authResult.Username
                     });
                 }
 
@@ -157,10 +157,11 @@ namespace Fantasy_Land_Web_Api.Controllers
         }
 
 
-        private TokenResponse GenerateJwtToken(User user)
+        private AuthResult GenerateJwtToken(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration.GetSection(key: "JwtConfig:Secret").Value);
+            var secret = Environment.GetEnvironmentVariable("FANTASY_LAND_SECRET");
+            var key = Encoding.UTF8.GetBytes(secret);
 
             //Token descriptor
 
@@ -184,12 +185,16 @@ namespace Fantasy_Land_Web_Api.Controllers
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             var jwtToken = jwtTokenHandler.WriteToken(token);
 
-            TokenResponse response = new TokenResponse()
+            HttpContext.Response.Cookies.Append(Constants.XAccessToken, jwtToken, new CookieOptions()
             {
-                Token = jwtToken
-            };
+                Expires = DateTime.Now.AddDays(7),
+                HttpOnly = true,
+                Secure = true,
+                IsEssential = true,
+                SameSite = SameSiteMode.Strict
+            });
 
-            return response;
+            return new AuthResult { Token = jwtToken, Username = user.UserName };
         }
     }
 }

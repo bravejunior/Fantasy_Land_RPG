@@ -7,14 +7,31 @@ namespace Fantasy_Land_Web_Client.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private HttpClient _httpclient;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, HttpClient httpclient)
         {
             _logger = logger;
+            _httpclient = httpclient;
         }
 
-        public IActionResult Index() //Test if token works
+        public async Task<IActionResult> IndexAsync() //Test if token works
         {
+            HttpResponseMessage response = await _httpclient.GetAsync("api/character/characters");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                //var piss = response.Content.Headers;
+                ViewBag.Message = content;
+                return View();
+
+            }
+            else
+            {
+
+                return View();
+            }
             return View();
         }
 

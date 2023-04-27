@@ -32,6 +32,9 @@ namespace Fantasy_Land_Web_Api
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddCookie(options =>
+            {
+                options.Cookie.Name = "token";
             })
                 .AddJwtBearer(jwt =>
                 {
@@ -47,6 +50,15 @@ namespace Fantasy_Land_Web_Api
                         RequireExpirationTime = false,    //false för development, kan bli strul i dev environment - uppdatera när refresh token finns
                         ValidateLifetime = true
                     };
+                    jwt.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.Request.Cookies[Constants.XAccessToken];
+                            return Task.CompletedTask;
+                        }
+                    };
+
                 });
 
             builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)

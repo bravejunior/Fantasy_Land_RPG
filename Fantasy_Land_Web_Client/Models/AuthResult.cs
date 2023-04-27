@@ -1,4 +1,4 @@
-﻿namespace Fantasy_Land_Web_Api.Models
+﻿namespace Fantasy_Land_Web_Client.Models
 {
     public class AuthResult
     {
