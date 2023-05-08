@@ -1,14 +1,16 @@
-﻿using Fantasy_Land_Web_Api.Configurations;
-using Fantasy_Land_Web_Api.Context;
-using Fantasy_Land_Web_Api.Models;
-using Fantasy_Land_Web_Api.Models.DTOs;
+﻿using Fantasy_Land_Web_Api.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Models.DTOs;
+using Models.Configurations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using Fantasy_Land_Web_Api.Interfaces;
 
 namespace Fantasy_Land_Web_Api.Controllers
 {
@@ -18,13 +20,29 @@ namespace Fantasy_Land_Web_Api.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly FantasyLandDbContext _dbContext;
-        private readonly IConfiguration _configuration;
+        private readonly JwtConfig _jwtConfig;
+        private readonly ITokenService _tokenService;
 
-        public AccountController(UserManager<User> userManager, FantasyLandDbContext dbContext, IConfiguration configuration)
+        public AccountController(UserManager<User> userManager, FantasyLandDbContext dbContext, JwtConfig jwtConfig, ITokenService tokenService)
         {
             this._userManager = userManager;
             this._dbContext = dbContext;
-            this._configuration = configuration;
+            this._jwtConfig = jwtConfig;
+            this._tokenService = tokenService;
+        }
+
+        private bool IsRevoked(RefreshToken refreshToken)
+        {
+            bool isRevoked = false;
+
+            if (refreshToken != null)
+            {
+                if (refreshToken.IsRevoked)
+                {
+                    isRevoked = true;
+                }
+            }
+            return isRevoked;
         }
 
 
@@ -36,7 +54,7 @@ namespace Fantasy_Land_Web_Api.Controllers
             {
                 //Check if user exist
 
-                var existing_user = _userManager.Users.FirstOrDefault(p => p.UserName.Equals(requestDto.Username));
+                var existing_user = await _userManager.Users.FirstOrDefaultAsync(p => p.UserName.Equals(requestDto.Username));
 
                 if (existing_user == null)
                 {
@@ -51,9 +69,7 @@ namespace Fantasy_Land_Web_Api.Controllers
 
                 }
 
-
                 var isCorrect = await _userManager.CheckPasswordAsync(existing_user, requestDto.Password);
-
 
                 if (!isCorrect)
                 {
@@ -67,12 +83,69 @@ namespace Fantasy_Land_Web_Api.Controllers
                     });
                 }
 
-                GenerateJwtToken(existing_user);
+                var refreshToken = await _tokenService.GetRefreshTokenAsync(existing_user.Id);
 
-                return Ok(new AuthResult()
+                if (refreshToken == null)
                 {
-                    Result = true
+                    refreshToken = new RefreshToken
+                    {
+                        UserId = existing_user.Id,
+                        Token = _tokenService.GenerateRefreshToken(),
+                        Expires = DateTime.Now.AddMinutes(_jwtConfig.RefreshTokenExpiration),
+                        RemoteIpAddress = requestDto.RemoteIpAddress
+                    };
+
+                    await _dbContext.RefreshTokens.AddAsync(refreshToken);
+                    await _dbContext.SaveChangesAsync();
+                }
+
+                else if (refreshToken.IsRevoked)
+                {
+                    return BadRequest(new AuthResult()
+                    {
+                        Errors = new List<string>()
+                        {
+                            "Refresh token has been revoked"
+                        },
+                        Result = false
+                    });
+                }
+
+                else if (refreshToken.Expires < DateTime.Now)
+                {
+                    refreshToken.Token = _tokenService.GenerateRefreshToken();
+                    refreshToken.Expires = DateTime.Now.AddMinutes(_jwtConfig.RefreshTokenExpiration);
+
+                    await _tokenService.UpdateRefreshTokenAsync(existing_user.Id);
+                    await _dbContext.SaveChangesAsync();
+                }
+
+                var authResult = _tokenService.GenerateAccessToken(existing_user);
+
+                Response.Cookies.Append(Constants.XAccessToken, authResult.AccessToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Expires = DateTime.Now.AddMinutes(_jwtConfig.AccessTokenExpiration),
+                    SameSite = SameSiteMode.Strict,
+                    Secure = true
                 });
+
+                Response.Cookies.Append(Constants.XRefreshToken, refreshToken.Token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Expires = DateTime.Now.AddMinutes(_jwtConfig.RefreshTokenExpiration),
+                    SameSite = SameSiteMode.Strict,
+                    Secure = true
+                });
+
+                var refreshTokenResponse = new RefreshTokenResponseDto
+                {
+                    AccessToken = authResult.AccessToken,
+                    RefreshToken = refreshToken.Token,
+                    Expires = refreshToken.Expires
+                };
+
+                return Ok(refreshTokenResponse);
 
             }
 
@@ -129,7 +202,7 @@ namespace Fantasy_Land_Web_Api.Controllers
                 {
                     //Generate token
 
-                    AuthResult authResult = GenerateJwtToken(new_user);
+                    AuthResult authResult = _tokenService.GenerateAccessToken(new_user);
 
 
                     _dbContext.Users.Add(new_user);
@@ -137,7 +210,7 @@ namespace Fantasy_Land_Web_Api.Controllers
                     {
                         Result = true,
                         Errors = null,
-                        Token = authResult.Token,
+                        AccessToken = authResult.AccessToken,
                         Username = authResult.Username
                     });
                 }
@@ -156,45 +229,5 @@ namespace Fantasy_Land_Web_Api.Controllers
 
         }
 
-
-        private AuthResult GenerateJwtToken(User user)
-        {
-            var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var secret = Environment.GetEnvironmentVariable("FANTASY_LAND_SECRET");
-            var key = Encoding.UTF8.GetBytes(secret);
-
-            //Token descriptor
-
-            var tokenDescriptor = new SecurityTokenDescriptor()
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(type:"Id", value:user.Id),
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
-                    new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
-                }),
-
-                Expires = DateTime.Now.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
-
-            };
-
-            var token = jwtTokenHandler.CreateToken(tokenDescriptor);
-            var jwtToken = jwtTokenHandler.WriteToken(token);
-
-            HttpContext.Response.Cookies.Append(Constants.XAccessToken, jwtToken, new CookieOptions()
-            {
-                Expires = DateTime.Now.AddDays(7),
-                HttpOnly = true,
-                Secure = true,
-                IsEssential = true,
-                SameSite = SameSiteMode.Strict
-            });
-
-            return new AuthResult { Token = jwtToken, Username = user.UserName };
-        }
     }
 }

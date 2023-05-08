@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
-namespace Fantasy_Land_Web_Api.Models
+namespace Models.DTOs
 {
     public class UserRegisterViewModel
     {

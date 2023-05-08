@@ -3,9 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fantasy_Land_Web_Client", "Fantasy_Land_Web_Client\Fantasy_Land_Web_Client.csproj", "{3F7B18E6-0BAC-42F7-8DD4-2AA3AAB52C2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fantasy_Land_Web_Client", "Fantasy_Land_Web_Client\Fantasy_Land_Web_Client.csproj", "{3F7B18E6-0BAC-42F7-8DD4-2AA3AAB52C2B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0714DB52-C31E-4315-BBA3-3B74CCCFC192} = {0714DB52-C31E-4315-BBA3-3B74CCCFC192}
+		{AEE61061-DE13-4E62-9142-E0DFFB29DAA2} = {AEE61061-DE13-4E62-9142-E0DFFB29DAA2}
+		{F10632A0-3875-4CAA-A354-9D95BFA94E12} = {F10632A0-3875-4CAA-A354-9D95BFA94E12}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fantasy_Land_Web_Api", "Fantasy_Land_Web_Api\Fantasy_Land_Web_Api.csproj", "{F10632A0-3875-4CAA-A354-9D95BFA94E12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fantasy_Land_Web_Api", "Fantasy_Land_Web_Api\Fantasy_Land_Web_Api.csproj", "{F10632A0-3875-4CAA-A354-9D95BFA94E12}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AEE61061-DE13-4E62-9142-E0DFFB29DAA2} = {AEE61061-DE13-4E62-9142-E0DFFB29DAA2}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{AEE61061-DE13-4E62-9142-E0DFFB29DAA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiClient", "ApiClient\ApiClient.csproj", "{0714DB52-C31E-4315-BBA3-3B74CCCFC192}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AEE61061-DE13-4E62-9142-E0DFFB29DAA2} = {AEE61061-DE13-4E62-9142-E0DFFB29DAA2}
+		{F10632A0-3875-4CAA-A354-9D95BFA94E12} = {F10632A0-3875-4CAA-A354-9D95BFA94E12}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +37,14 @@ Global
 		{F10632A0-3875-4CAA-A354-9D95BFA94E12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F10632A0-3875-4CAA-A354-9D95BFA94E12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F10632A0-3875-4CAA-A354-9D95BFA94E12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEE61061-DE13-4E62-9142-E0DFFB29DAA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEE61061-DE13-4E62-9142-E0DFFB29DAA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEE61061-DE13-4E62-9142-E0DFFB29DAA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEE61061-DE13-4E62-9142-E0DFFB29DAA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0714DB52-C31E-4315-BBA3-3B74CCCFC192}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0714DB52-C31E-4315-BBA3-3B74CCCFC192}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0714DB52-C31E-4315-BBA3-3B74CCCFC192}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0714DB52-C31E-4315-BBA3-3B74CCCFC192}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

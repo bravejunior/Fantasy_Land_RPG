@@ -1,7 +1,7 @@
-﻿using Fantasy_Land_Web_Api.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Models.DTOs;
 
 namespace Fantasy_Land_Web_Api.Context
 {
@@ -10,7 +10,9 @@ namespace Fantasy_Land_Web_Api.Context
 
         public DbSet<Character> Characters { get; set; }
 
-        public FantasyLandDbContext(DbContextOptions options) : base(options)
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
+        public FantasyLandDbContext(DbContextOptions<FantasyLandDbContext> options) : base(options)
         {
 
         }
@@ -24,7 +26,7 @@ namespace Fantasy_Land_Web_Api.Context
                     .AddJsonFile("appsettings.json")
                     .Build();
                 var connectionString = configuration.GetConnectionString("SqlConnection");
-                optionsBuilder.UseSqlServer(connectionString);
+                optionsBuilder.UseSqlServer(connectionString).LogTo(Console.WriteLine, LogLevel.Information);
             }
         }
 

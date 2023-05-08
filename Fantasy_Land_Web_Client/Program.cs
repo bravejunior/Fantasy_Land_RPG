@@ -1,4 +1,7 @@
-using Fantasy_Land_Web_Client.Configurations;
+using ApiClient;
+using Fantasy_Land_Web_Api.Interfaces;
+using Fantasy_Land_Web_Api.Token_Management;
+using Models.Configurations;
 using System.Net.Http.Headers;
 
 namespace Fantasy_Land_Web_Client
@@ -15,17 +18,24 @@ namespace Fantasy_Land_Web_Client
             HttpClientHandler clientHandler = new HttpClientHandler();
             clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
-            HttpClient client = new HttpClient(clientHandler);
-            client.BaseAddress = new Uri("https://localhost:7290/api");
-
-            builder.Services.AddSingleton<HttpClient>(client);
+            //HttpClient client = new CustomHttpClient(clientHandler);
+            //client.BaseAddress = new Uri("https://localhost:7290/api");
 
             var secret = Environment.GetEnvironmentVariable("FANTASY_LAND_SECRET");
+            var jwtConfig = new JwtConfig
+            {
+                Secret = secret,
+                AccessTokenExpiration = 60, // set the access token expiration time
+                RefreshTokenExpiration = 1440 // set the refresh token expiration time
+            };
 
-            builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(key: secret));
+            builder.Services.AddSingleton(jwtConfig);
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddSingleton<CustomHttpClient>();
 
+
+            //builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(key: secret));
             var app = builder.Build();
-
 
 
             // Configure the HTTP request pipeline.

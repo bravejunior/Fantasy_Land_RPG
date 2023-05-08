@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 
-namespace Fantasy_Land_Web_Client.Models
+namespace Models.DTOs
 {
-    public class UserRegisterViewModel
+    public class UserRegistrationRequestDto
     {
         [Required(ErrorMessage = "Make sure you've entered your first name.")]
         [StringLength(20, ErrorMessage = "First names may only contain a maximum of 20 characters.")]

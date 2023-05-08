@@ -1,7 +1,7 @@
 ﻿using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Fantasy_Land_Web_Api.Models
+namespace Models.DTOs
 {
     public class Character
     {
