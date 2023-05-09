@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 
-namespace Fantasy_Land_Web_Client.Models
+namespace Models.DTOs
 {
-    public class UserLoginViewModel
+    public class UserLoginRequestDto
     {
         [Required(ErrorMessage = "Username can't be empty.")]
         [StringLength(20)]
@@ -12,6 +13,7 @@ namespace Fantasy_Land_Web_Client.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public bool RememberMe { get; set; } = true;
+        [BindNever]
+        public string RemoteIpAddress { get; set; }
     }
 }

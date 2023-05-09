@@ -1,9 +1,9 @@
 ﻿using Fantasy_Land_Web_Api.Context;
-using Fantasy_Land_Web_Api.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models.DTOs;
 
 namespace Fantasy_Land_Web_Api.Controllers
 {

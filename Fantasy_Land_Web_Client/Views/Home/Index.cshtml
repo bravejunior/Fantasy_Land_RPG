@@ -1,4 +1,7 @@
-﻿@{
+﻿@model List<Character>
+
+@using Models.DTOs
+@{
 	ViewData["Title"] = "Home Page";
 }
 
@@ -8,6 +11,14 @@
 </div>
 
 
-
-	<div>@ViewBag.Message</div>
-	<div>Hej</div>
+@{
+	if (Model != null)
+	{
+		foreach (var item in Model)
+		{
+			<div>@item.CharacterName</div>
+		}
+	}
+}
+@*	<div>@ViewBag.Message</div>
+	<div>Hej</div>*@

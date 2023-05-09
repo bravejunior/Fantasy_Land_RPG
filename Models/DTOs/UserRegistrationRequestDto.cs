@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 
-namespace Fantasy_Land_Web_Api.Models
+namespace Models.DTOs
 {
-    public class UserRegisterViewModel
+    public class UserRegistrationRequestDto
     {
         [Required(ErrorMessage = "Make sure you've entered your first name.")]
         [StringLength(20, ErrorMessage = "First names may only contain a maximum of 20 characters.")]
@@ -37,5 +37,8 @@ namespace Fantasy_Land_Web_Api.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The passwords don't match")]
         public string ConfirmPassword { get; set; }
+
+        [BindNever]
+        public string? RemoteIpAddress { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Fantasy_Land_Web_Api.Models
+namespace Models.DTOs
 {
     public class User : IdentityUser
     {

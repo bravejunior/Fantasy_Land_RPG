@@ -1,20 +1,23 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Fantasy_Land_Web_Client.Models;
 using System.Text.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Newtonsoft.Json;
+using Models.DTOs;
+using Models.Configurations;
 
 namespace Fantasy_Land_Web_Client.Controllers
 {
     public class AccountController : Controller
     {
-        private HttpClient _httpclient;
+        private CustomHttpClient _httpclient;
+        private readonly JwtConfig _jwtConfig;
 
-        public AccountController(HttpClient httpClient)
+        public AccountController(CustomHttpClient httpClient, JwtConfig jwtConfig)
         {
-            this._httpclient = httpClient;
+            _httpclient = httpClient;
+            _jwtConfig = jwtConfig;
         }
 
         public IActionResult Index()
@@ -22,10 +25,10 @@ namespace Fantasy_Land_Web_Client.Controllers
             return View();
         }
 
-        public IEnumerable<Claim> ExtractClaims(string jwtToken)
+        public IEnumerable<Claim> ExtractClaims(string accessToken)
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            JwtSecurityToken securityToken = (JwtSecurityToken)tokenHandler.ReadToken(jwtToken);
+            JwtSecurityToken securityToken = (JwtSecurityToken)tokenHandler.ReadToken(accessToken);
             IEnumerable<Claim> claims = securityToken.Claims;
 
             return claims;
@@ -51,15 +54,15 @@ namespace Fantasy_Land_Web_Client.Controllers
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     var result = JsonConvert.DeserializeObject<AuthResult>(responseContent);
-                    string token = result.Token;
+                    string accessToken = result.AccessToken;
 
-                    CreateTokenCookie(token);
+                    var loginViewModel = new UserLoginViewModel
+                    {
+                        Username = viewModel.Username,
+                        Password = viewModel.Password
+                    };
 
-
-                    //var token = HttpContext.Request.Cookies[Constants.XAccessToken];
-                    var claims = ExtractClaims(token);
-
-
+                    LogIn(loginViewModel);
 
                     return RedirectToAction("Index", "Home");
 
@@ -89,22 +92,6 @@ namespace Fantasy_Land_Web_Client.Controllers
         }
 
         [HttpPost]
-        private void CreateTokenCookie(string token)
-        {
-            HttpContext.Response.Cookies.Append(Constants.XAccessToken, token, new CookieOptions()
-            {
-                Expires = DateTime.Now.AddDays(7),
-                HttpOnly = true,
-                Secure = true,
-                IsEssential = true,
-                SameSite = SameSiteMode.Strict
-            });
-
-        }
-
-
-
-        [HttpPost]
         public async Task<IActionResult> LogIn(UserLoginViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -115,6 +102,8 @@ namespace Fantasy_Land_Web_Client.Controllers
                     PropertyNameCaseInsensitive = true
                 };
 
+                viewModel.RemoteIpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+
                 string data = System.Text.Json.JsonSerializer.Serialize(viewModel, options);
                 var contentData = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
 
@@ -123,8 +112,8 @@ namespace Fantasy_Land_Web_Client.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var token = HttpContext.Request.Cookies[Constants.XAccessToken];
-                    var claims = ExtractClaims(token);
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<RefreshTokenResponseDto>(responseContent);
 
                     return RedirectToAction("Index", "Home");
                 }

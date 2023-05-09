@@ -1,11 +1,14 @@
-using Fantasy_Land_Web_Api.Configurations;
 using Fantasy_Land_Web_Api.Context;
-using Fantasy_Land_Web_Api.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Models.DTOs;
+using Models.Configurations;
 using System.Text;
+using Fantasy_Land_Web_Api.Token_Management;
+using Fantasy_Land_Web_Api.Interfaces;
+using Fantasy_Land_Web_Api.Middleware;
 
 namespace Fantasy_Land_Web_Api
 {
@@ -22,10 +25,20 @@ namespace Fantasy_Land_Web_Api
 
             builder.Services.AddControllers();
 
+            var secret = Environment.GetEnvironmentVariable("FANTASY_LAND_SECRET");
+            var jwtConfig = new JwtConfig
+            {
+                Secret = secret,
+                AccessTokenExpiration = 1, // set the access token expiration time
+                RefreshTokenExpiration = 1440 // set the refresh token expiration time
+            };
+
+            builder.Services.AddSingleton(jwtConfig);
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+            .AddEntityFrameworkStores<FantasyLandDbContext>();
+
             builder.Services.AddDbContext<FantasyLandDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
-
-            builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(key: "JwtConfig")); //dependency injection container -hämtar secret från appsettings?
-
 
             builder.Services.AddAuthentication(configureOptions: options =>
             {
@@ -38,7 +51,7 @@ namespace Fantasy_Land_Web_Api
             })
                 .AddJwtBearer(jwt =>
                 {
-                    var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection(key: "JwtConfig:Secret").Value);
+                    var key = Encoding.ASCII.GetBytes(secret);
 
                     jwt.SaveToken = true;
                     jwt.TokenValidationParameters = new TokenValidationParameters()
@@ -61,9 +74,6 @@ namespace Fantasy_Land_Web_Api
 
                 });
 
-            builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<FantasyLandDbContext>();
-
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
@@ -75,6 +85,9 @@ namespace Fantasy_Land_Web_Api
                 options.Password.RequiredUniqueChars = 1;
             });
 
+            //gör så routing blir endast lowercase
+            builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
             builder.Services.AddSwaggerGen(options =>
             {
                 options.EnableAnnotations();
@@ -83,6 +96,8 @@ namespace Fantasy_Land_Web_Api
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
+
+            app.UseMiddleware<TokenRefreshMiddleware>();
 
             app.UseSwagger();
 
