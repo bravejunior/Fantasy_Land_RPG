@@ -1,5 +1,6 @@
 ﻿using Fantasy_Land_Web_Api.Interfaces;
 using Models.Configurations;
+using System.Net.Http.Headers;
 
 namespace Fantasy_Land_Web_Api.Middleware
 {
@@ -8,6 +9,8 @@ namespace Fantasy_Land_Web_Api.Middleware
 
         private readonly RequestDelegate _next;
         private readonly JwtConfig _jwtConfig;
+
+
 
         public TokenRefreshMiddleware(RequestDelegate next, JwtConfig jwtConfig)
         {
@@ -22,20 +25,25 @@ namespace Fantasy_Land_Web_Api.Middleware
             if (context.Response.StatusCode == 401)
             {
                 var refreshToken = context.Request.Cookies[Constants.XRefreshToken];
-                var authResult = await tokenService.RefreshAccessTokenAsync(refreshToken);
 
-                if (authResult != null)
+                if (refreshToken != null)
                 {
-                    context.Response.Cookies.Append(Constants.XAccessToken, authResult.AccessToken, new CookieOptions()
+                    var authResult = await tokenService.RefreshAccessTokenAsync(refreshToken);
+
+                    if (authResult != null)
                     {
-                        Expires = DateTime.Now.AddMinutes(_jwtConfig.AccessTokenExpiration),
-                        HttpOnly = true,
-                        Secure = true,
-                        IsEssential = true,
-                        SameSite = SameSiteMode.Strict
-                    });
-                    context.Response.Headers.Add(Constants.XAccessToken, authResult.AccessToken);
-                    context.Response.StatusCode = 200;
+                        context.Response.Cookies.Append(Constants.XAccessToken, authResult.AccessToken, new CookieOptions
+                        {
+                            HttpOnly = true,
+                            Expires = DateTime.Now.AddMinutes(_jwtConfig.AccessTokenExpiration),
+                            SameSite = SameSiteMode.Strict,
+                            Secure = true
+                        });
+
+
+
+                        return;
+                    }
                 }
             }
         }

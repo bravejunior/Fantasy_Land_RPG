@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 
 namespace Models.DTOs
 {
@@ -36,5 +37,8 @@ namespace Models.DTOs
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The passwords don't match")]
         public string ConfirmPassword { get; set; }
+
+        [BindNever]
+        public string? RemoteIpAddress { get; set; }
     }
 }

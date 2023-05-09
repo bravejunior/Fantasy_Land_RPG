@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models.DTOs
 {
-    internal class Class1
+    internal class AccessToken
     {
     }
 }

@@ -206,6 +206,7 @@ namespace Fantasy_Land_Web_Api.Controllers
 
 
                     _dbContext.Users.Add(new_user);
+
                     return Ok(new AuthResult()
                     {
                         Result = true,

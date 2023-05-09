@@ -24,6 +24,8 @@ namespace ApiClient
 
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
+
+
                 string responseContent = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<RefreshTokenResponseDto>(responseContent);
                 string refreshToken = result.RefreshToken;

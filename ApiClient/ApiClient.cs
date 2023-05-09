@@ -7,11 +7,6 @@ namespace ApiClient
 {
     public static class ApiClient
     {
-        public static void ConfigureServices(IServiceCollection services, JwtConfig jwtConfig)
-        {
-            services.AddSingleton<CustomHttpClient>();
-            services.AddSingleton<ITokenService, TokenService>();
-            services.AddSingleton(jwtConfig);
-        }
+
     }
 }

@@ -119,7 +119,7 @@ namespace Fantasy_Land_Web_Api.Token_Management
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(type:"Id", value:user.Id),
+                    //new Claim(type:"Id", value:user.Id),
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())

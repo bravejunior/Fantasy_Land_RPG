@@ -25,8 +25,6 @@ namespace Fantasy_Land_Web_Api
 
             builder.Services.AddControllers();
 
-            builder.Services.AddDbContext<FantasyLandDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
-
             var secret = Environment.GetEnvironmentVariable("FANTASY_LAND_SECRET");
             var jwtConfig = new JwtConfig
             {
@@ -35,13 +33,12 @@ namespace Fantasy_Land_Web_Api
                 RefreshTokenExpiration = 1440 // set the refresh token expiration time
             };
 
-            //builder.Services.AddHttpClient<CustomHttpClient>()
-            //.AddHttpMessageHandler<AuthorizationHeaderHandler>();
-            //builder.Services.AddTransient<AuthorizationHeaderHandler>();
-
             builder.Services.AddSingleton(jwtConfig);
             builder.Services.AddScoped<ITokenService, TokenService>();
-            //builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(key: "JwtConfig")); //dependency injection container -hämtar secret från appsettings?
+            builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+            .AddEntityFrameworkStores<FantasyLandDbContext>();
+
+            builder.Services.AddDbContext<FantasyLandDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("SqlConnection")));
 
             builder.Services.AddAuthentication(configureOptions: options =>
             {
@@ -76,9 +73,6 @@ namespace Fantasy_Land_Web_Api
                     };
 
                 });
-
-            builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<FantasyLandDbContext>();
 
 
             builder.Services.Configure<IdentityOptions>(options =>

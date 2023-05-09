@@ -10,8 +10,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Fantasy_Land_Web_Api\Fantasy_Land_Web_Api.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -11,13 +11,13 @@ namespace Fantasy_Land_Web_Client.Controllers
 {
     public class AccountController : Controller
     {
-        private HttpClient _httpclient;
+        private CustomHttpClient _httpclient;
         private readonly JwtConfig _jwtConfig;
 
-        public AccountController(HttpClient httpClient, JwtConfig jwtconfig)
+        public AccountController(CustomHttpClient httpClient, JwtConfig jwtConfig)
         {
-            this._httpclient = httpClient;
-            _jwtConfig = jwtconfig;
+            _httpclient = httpClient;
+            _jwtConfig = jwtConfig;
         }
 
         public IActionResult Index()
@@ -56,13 +56,13 @@ namespace Fantasy_Land_Web_Client.Controllers
                     var result = JsonConvert.DeserializeObject<AuthResult>(responseContent);
                     string accessToken = result.AccessToken;
 
-                    //CreateAccessTokenCookie(accessToken);
+                    var loginViewModel = new UserLoginViewModel
+                    {
+                        Username = viewModel.Username,
+                        Password = viewModel.Password
+                    };
 
-
-                    //var token = HttpContext.Request.Cookies[Constants.XAccessToken];
-                    var claims = ExtractClaims(accessToken);
-
-
+                    LogIn(loginViewModel);
 
                     return RedirectToAction("Index", "Home");
 
@@ -113,10 +113,7 @@ namespace Fantasy_Land_Web_Client.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<AuthResult>(responseContent);
-                    string accessToken = result.AccessToken;
-
-                    var claims = ExtractClaims(accessToken);
+                    var result = JsonConvert.DeserializeObject<RefreshTokenResponseDto>(responseContent);
 
                     return RedirectToAction("Index", "Home");
                 }

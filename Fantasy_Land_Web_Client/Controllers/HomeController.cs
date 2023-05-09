@@ -1,5 +1,4 @@
-﻿using ApiClient;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Models.DTOs;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -10,7 +9,7 @@ namespace Fantasy_Land_Web_Client.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private HttpClient _httpclient;
+        private CustomHttpClient _httpclient;
 
         public HomeController(ILogger<HomeController> logger, CustomHttpClient httpclient)
         {
@@ -20,22 +19,18 @@ namespace Fantasy_Land_Web_Client.Controllers
 
         public async Task<IActionResult> IndexAsync()
         {
-
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "api/character/characters");
-            HttpResponseMessage response = await _httpclient.SendAsync(request);
+            string requestUri = "api/character/characters";
+            HttpResponseMessage response = await _httpclient.SendAsync(HttpMethod.Get, requestUri);
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var characters = JsonConvert.DeserializeObject<List<Character>>(content);
 
-                ViewBag.Message = content;
-                return View();
+                return View(characters);
             }
-            else
-            {
-                return View();
-            }
+
+            return View();
         }
 
         public IActionResult Privacy()

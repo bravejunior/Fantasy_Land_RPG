@@ -19,7 +19,7 @@ namespace Fantasy_Land_Web_Api.Controllers
             _dbContext = dbContext;
         }
 
-        
+
         [HttpGet]
         [Route("characters")]
         public List<Character> GetAllCharacters()
@@ -28,6 +28,7 @@ namespace Fantasy_Land_Web_Api.Controllers
         }
 
         [HttpPost]
+        [Route("character")]
         public void AddCharacter(Character character)
         {
             if (ModelState.IsValid)
