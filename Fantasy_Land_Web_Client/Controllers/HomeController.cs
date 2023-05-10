@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Fantasy_Land_Web_Client.Viewmodels;
+using Microsoft.AspNetCore.Mvc;
 using Models.DTOs;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -19,15 +20,15 @@ namespace Fantasy_Land_Web_Client.Controllers
 
         public async Task<IActionResult> IndexAsync()
         {
-            string requestUri = "api/character/characters";
+            string requestUri = "api/token/token-validation";
             HttpResponseMessage response = await _httpclient.SendAsync(HttpMethod.Get, requestUri);
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var characters = JsonConvert.DeserializeObject<List<Character>>(content);
+                var tokenIsValid = JsonConvert.DeserializeObject<bool>(content);
 
-                return View(characters);
+                return View(tokenIsValid);
             }
 
             return View();

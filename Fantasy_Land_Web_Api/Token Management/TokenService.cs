@@ -99,7 +99,7 @@ namespace Fantasy_Land_Web_Api.Token_Management
                 Subject = new ClaimsIdentity(new[]
                 {
                     // adding claims to access token
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Aud, audience),
                     new Claim(JwtRegisteredClaimNames.Iss, issuer),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

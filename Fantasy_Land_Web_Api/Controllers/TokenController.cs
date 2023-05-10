@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.Configurations;
 using Models.DTOs;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Fantasy_Land_Web_Api.Controllers
 {
@@ -34,5 +36,22 @@ namespace Fantasy_Land_Web_Api.Controllers
 
             return Ok();
         }
+
+        [Route("token-validation")]
+        [HttpGet]
+        public async Task<bool> CheckIfValidToken()
+        {
+            bool result = false;
+            var user = HttpContext.User;
+            var username = User.FindFirstValue(JwtRegisteredClaimNames.Name);
+
+            if (!string.IsNullOrEmpty(username))
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
     }
 }

@@ -1,23 +1,19 @@
-﻿@model List<Character>
-
+﻿@model bool
 @using Models.DTOs
+
 @{
 	ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-	<h1 class="display-4">Welcome</h1>
-	<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-
 
 @{
-	if (Model != null)
+	if (Model == false)
 	{
-		foreach (var item in Model)
-		{
-			<div>@item.CharacterName</div>
-		}
+		<div>false</div>
+	}
+	else
+	{
+		<div>true</div>
 	}
 }
 @*	<div>@ViewBag.Message</div>
