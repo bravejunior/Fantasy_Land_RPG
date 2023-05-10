@@ -40,8 +40,6 @@ namespace Fantasy_Land_Web_Api.Middleware
                             Secure = true
                         });
 
-
-
                         return;
                     }
                 }

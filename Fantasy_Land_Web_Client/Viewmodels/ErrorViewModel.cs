@@ -1,4 +1,4 @@
-namespace Models.DTOs
+namespace Fantasy_Land_Web_Client.Viewmodels
 {
     public class ErrorViewModel
     {

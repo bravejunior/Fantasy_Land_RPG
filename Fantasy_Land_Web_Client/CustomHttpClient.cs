@@ -39,12 +39,11 @@ namespace Fantasy_Land_Web_Client
 
         public async Task<HttpResponseMessage> SendAsync(HttpMethod method, string requestUri)
         {
-            //Sends the request to the base
+            // Sends the request to the base
             HttpRequestMessage request = new HttpRequestMessage(method, requestUri);
             HttpResponseMessage response = await base.SendAsync(request);
 
-            //If it gets 401 the middleware will add a access token if available, so tries to resend
-
+            // If it gets 401 the middleware will add a access token if available, so tries to resend
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 request = new HttpRequestMessage(method, requestUri);
@@ -53,11 +52,6 @@ namespace Fantasy_Land_Web_Client
 
             return response;
         }
-
-
-
-
-
         public async Task<AuthResult> GetAuthResultAsync(HttpResponseMessage data)
         {
             string responseContent = await data.Content.ReadAsStringAsync();

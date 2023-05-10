@@ -56,11 +56,13 @@ namespace Fantasy_Land_Web_Api
                     jwt.SaveToken = true;
                     jwt.TokenValidationParameters = new TokenValidationParameters()
                     {
+                        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                        ValidAudience = builder.Configuration["JwtSettings:Audience"],
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,          //false för development, kan bli strul i dev environment
-                        ValidateAudience = false,        //false för development, kan bli strul i dev environment
-                        RequireExpirationTime = false,    //false för development, kan bli strul i dev environment - uppdatera när refresh token finns
+                        ValidateIssuer = true,          //false för development, kan bli strul i dev environment
+                        ValidateAudience = true,        //gör det knas
+                        RequireExpirationTime = true,    //false för development, kan bli strul i dev environment - uppdatera när refresh token finns
                         ValidateLifetime = true
                     };
                     jwt.Events = new JwtBearerEvents

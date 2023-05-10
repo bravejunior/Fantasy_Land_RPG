@@ -17,22 +17,16 @@ namespace Fantasy_Land_Web_Api.Token_Management
         private readonly FantasyLandDbContext _dbContext;
         private readonly JwtConfig _jwtConfig;
         private readonly UserManager<User> _userManager;
+        private readonly IConfiguration _configuration;
 
 
-        public TokenService(FantasyLandDbContext dbContext, JwtConfig jwtConfig, UserManager<User> userManager)
+
+        public TokenService(FantasyLandDbContext dbContext, JwtConfig jwtConfig, UserManager<User> userManager, IConfiguration configuration)
         {
             this._dbContext = dbContext;
             this._jwtConfig = jwtConfig;
             this._userManager = userManager;
-        }
-
-        public async Task<string> GetAccessTokenAsync(string refreshToken)
-        {
-            // Not implemented in this example
-            // You could implement this method to get the access token from the server using the refresh token
-            // You can use the HttpClientFactory to create a new HttpClient and send a request to the server to get the access token
-            // The implementation could be similar to RefreshAccessTokenAsync but without refreshing the token
-            throw new NotImplementedException();
+            this._configuration = configuration;
         }
 
         public async Task<AuthResult> RefreshAccessTokenAsync(string refreshToken)
@@ -55,22 +49,6 @@ namespace Fantasy_Land_Web_Api.Token_Management
                 throw new ArgumentException("User not found.");
             }
 
-            //var roles = await _userManager.GetRolesAsync(user);
-
-            //var claims = new List<Claim>
-            //{
-            //    new Claim(ClaimTypes.Name, user.UserName),
-            //    new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            //};
-
-            //foreach (var role in roles)
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, role));
-            //}
-
-            //var accessToken = GenerateAccessToken(claims);
-
-
             var authResult = GenerateAccessToken(user);
 
             return authResult;
@@ -84,7 +62,7 @@ namespace Fantasy_Land_Web_Api.Token_Management
             return Convert.ToBase64String(randomNumber);
         }
 
-        private async Task<RefreshToken> UpdateRefreshTokenAsync(string userid)
+        public async Task<RefreshToken> UpdateRefreshTokenAsync(string userid)
         {
             var refreshToken = await _dbContext.RefreshTokens
                 .FirstOrDefaultAsync(t => t.UserId == userid);
@@ -96,7 +74,6 @@ namespace Fantasy_Land_Web_Api.Token_Management
 
             if (refreshToken != null)
             {
-
                 refreshToken.Token = GenerateRefreshToken();
                 refreshToken.Expires = DateTime.Now.AddMinutes(_jwtConfig.RefreshTokenExpiration);
                 _dbContext.RefreshTokens.Update(refreshToken);
@@ -113,19 +90,23 @@ namespace Fantasy_Land_Web_Api.Token_Management
             var secret = Environment.GetEnvironmentVariable("FANTASY_LAND_SECRET");
             var key = Encoding.UTF8.GetBytes(secret);
 
-            //Token descriptor
+
+            var issuer = _configuration.GetValue<string>("JwtSettings:Issuer");
+            var audience = _configuration.GetValue<string>("JwtSettings:Audience");
 
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    //new Claim(type:"Id", value:user.Id),
+                    // adding claims to access token
                     new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Aud, audience),
+                    new Claim(JwtRegisteredClaimNames.Iss, issuer),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
                 }),
 
-                Expires = DateTime.Now.AddHours(1),
+                Expires = DateTime.Now.AddMinutes(_jwtConfig.AccessTokenExpiration),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
 
             };
@@ -154,14 +135,5 @@ namespace Fantasy_Land_Web_Api.Token_Management
             return null;
         }
 
-        public Task<string> RefreshRefreshTokenAsync(string userid, string refreshToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<RefreshToken> ITokenService.UpdateRefreshTokenAsync(string userid)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
