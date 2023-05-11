@@ -42,44 +42,29 @@ namespace Fantasy_Land_Web_Client.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                var options = new JsonSerializerOptions
+                string data = System.Text.Json.JsonSerializer.Serialize(viewModel, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
-                };
+                });
 
-                string data = System.Text.Json.JsonSerializer.Serialize(viewModel, options);
                 var contentData = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
-
                 HttpResponseMessage response = await _httpclient.PostAsync($"api/account/register", contentData);
 
                 if (response.IsSuccessStatusCode)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     var result = JsonConvert.DeserializeObject<AuthResult>(responseContent);
-                    string accessToken = result.AccessToken;
 
-                    var loginViewModel = new UserLoginViewModel
+                    await LogIn(new UserLoginViewModel
                     {
                         Username = viewModel.Username,
-                        Password = viewModel.Password
-                    };
-
-                    LogIn(loginViewModel);
+                        Password = viewModel.Password,
+                    });
 
                     return RedirectToAction("Index", "Home");
-
-                }
-                else
-                {
-                    return View(viewModel);
                 }
             }
-
-            else
-            {
-                return View(viewModel);
-            }
+            return View();
         }
 
         [HttpPost]
@@ -87,40 +72,33 @@ namespace Fantasy_Land_Web_Client.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 };
 
                 viewModel.RemoteIpAddress = HttpContext.Connection.RemoteIpAddress.ToString();
-
                 string data = System.Text.Json.JsonSerializer.Serialize(viewModel, options);
                 var contentData = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
-
                 HttpResponseMessage response = await _httpclient.PostAsync($"api/account/login", contentData);
-
 
                 if (response.IsSuccessStatusCode)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     var result = JsonConvert.DeserializeObject<RefreshTokenResponseDto>(responseContent);
+                    
 
                     return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    return View(viewModel);
+                    ViewBag.Message = response.ReasonPhrase;
+                    return View();
                 }
             }
 
-            else
-            {
-                return View(viewModel);
-            }
+            return View();
         }
-
-
 
         [HttpGet]
         public async Task<IActionResult> Logout()

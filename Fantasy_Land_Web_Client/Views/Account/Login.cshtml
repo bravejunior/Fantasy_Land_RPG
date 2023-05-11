@@ -1,7 +1,7 @@
 ﻿@using Models.DTOs
 @model UserLoginViewModel
 
-<div asp-validation-summary="ModelOnly" class="text-danger" data-valmsg-summary="true"></div>
+<div asp-validation-summary="All" class="text-danger" data-valmsg-summary="true"></div>
 
 <div class="login-container">
 	<form method="post" asp-action="Login" class="login-form">
@@ -23,6 +23,8 @@
 		</div>
 
 		<button type="submit" class="btn btn-primary">Submit</button>
+
+		<div>@ViewBag.Message</div>
 
 	</form>
 

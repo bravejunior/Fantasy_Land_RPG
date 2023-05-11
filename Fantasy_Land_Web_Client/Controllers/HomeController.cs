@@ -23,8 +23,6 @@ namespace Fantasy_Land_Web_Client.Controllers
 
         public async Task<IActionResult> IndexAsync()
         {
-            //var user = await _userService.GetCurrentUserAsync();
-
             var user = ViewData["CurrentUser"];
             return View(user);
         }
