@@ -1,3 +1,6 @@
+using Fantasy_Land_Web_Client.Action_filters;
+using Fantasy_Land_Web_Client.Interfaces;
+using Fantasy_Land_Web_Client.Services;
 using Models.Configurations;
 using System.Net.Http.Headers;
 
@@ -25,12 +28,20 @@ namespace Fantasy_Land_Web_Client
             };
 
             builder.Services.AddSingleton(jwtConfig);
+            builder.Services.AddScoped<CurrentUserActionFilter>();
+            builder.Services.AddScoped<IUserService, UserService>();
+
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add(typeof(CurrentUserActionFilter));
+            });
+
 
             CustomHttpClient client = new CustomHttpClient(clientHandler);
             client.BaseAddress = new Uri("https://localhost:7290/api");
 
             builder.Services.AddSingleton<CustomHttpClient>(client);
-
+            builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 
             var app = builder.Build();

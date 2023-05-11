@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Fantasy_Land_Web_Api.Controllers
 {
@@ -25,6 +27,16 @@ namespace Fantasy_Land_Web_Api.Controllers
         public User GetUser(string userId)
         {
             return _dbContext.Users.FirstOrDefault(p => p.Id == userId);
+        }
+
+        [Route("current-user")]
+        [HttpGet]
+        public User GetUser()
+        {
+            var usercontext = HttpContext.User;
+            var username = usercontext.FindFirstValue(JwtRegisteredClaimNames.Name);
+
+            return _dbContext.Users.FirstOrDefault(p => p.UserName.Equals(username));
         }
     }
 }

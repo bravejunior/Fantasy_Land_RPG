@@ -45,9 +45,23 @@ namespace Fantasy_Land_Web_Api.Controllers
             return isRevoked;
         }
 
+        [HttpGet("logout")]
+        public IActionResult Logout()
+        {
+
+            Response.Cookies.Delete(Constants.XAccessToken, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                Secure = true
+            });
+
+            return Ok();
+        }
+
 
         [HttpPost]
-        [Route("Login")]
+        [Route("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequestDto requestDto)
         {
             if (ModelState.IsValid)
@@ -161,7 +175,7 @@ namespace Fantasy_Land_Web_Api.Controllers
 
 
         [HttpPost]
-        [Route("Register")]
+        [Route("register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequestDto requestDto)
         {
             //Validate incoming request

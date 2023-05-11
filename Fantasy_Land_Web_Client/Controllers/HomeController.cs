@@ -1,4 +1,5 @@
-﻿using Fantasy_Land_Web_Client.Viewmodels;
+﻿using Fantasy_Land_Web_Client.Interfaces;
+using Fantasy_Land_Web_Client.Viewmodels;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs;
 using Newtonsoft.Json;
@@ -11,27 +12,21 @@ namespace Fantasy_Land_Web_Client.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private CustomHttpClient _httpclient;
+        private IUserService _userService;
 
-        public HomeController(ILogger<HomeController> logger, CustomHttpClient httpclient)
+        public HomeController(ILogger<HomeController> logger, CustomHttpClient httpclient, IUserService userService)
         {
             _logger = logger;
             _httpclient = httpclient;
+            _userService = userService;
         }
 
         public async Task<IActionResult> IndexAsync()
         {
-            string requestUri = "api/token/token-validation";
-            HttpResponseMessage response = await _httpclient.SendAsync(HttpMethod.Get, requestUri);
+            //var user = await _userService.GetCurrentUserAsync();
 
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var tokenIsValid = JsonConvert.DeserializeObject<bool>(content);
-
-                return View(tokenIsValid);
-            }
-
-            return View();
+            var user = ViewData["CurrentUser"];
+            return View(user);
         }
 
         public IActionResult Privacy()

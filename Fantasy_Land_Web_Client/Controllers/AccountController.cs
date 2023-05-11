@@ -25,13 +25,16 @@ namespace Fantasy_Land_Web_Client.Controllers
             return View();
         }
 
-        public IEnumerable<Claim> ExtractClaims(string accessToken)
+        [HttpGet]
+        public IActionResult Register()
         {
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            JwtSecurityToken securityToken = (JwtSecurityToken)tokenHandler.ReadToken(accessToken);
-            IEnumerable<Claim> claims = securityToken.Claims;
+            return View();
+        }
 
-            return claims;
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
         }
 
         [HttpPost]
@@ -79,18 +82,6 @@ namespace Fantasy_Land_Web_Client.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
-
         [HttpPost]
         public async Task<IActionResult> LogIn(UserLoginViewModel viewModel)
         {
@@ -127,6 +118,17 @@ namespace Fantasy_Land_Web_Client.Controllers
             {
                 return View(viewModel);
             }
+        }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            var uri = "api/account/logout";
+            HttpResponseMessage response = await _httpclient.GetAsync(uri);
+
+            return RedirectToAction("Index", "Home");
         }
 
     }

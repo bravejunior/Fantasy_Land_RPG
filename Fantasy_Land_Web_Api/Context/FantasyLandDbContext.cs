@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models.DTOs;
+using Models.Entities.Token_management;
 
 namespace Fantasy_Land_Web_Api.Context
 {
@@ -11,6 +12,8 @@ namespace Fantasy_Land_Web_Api.Context
         public DbSet<Character> Characters { get; set; }
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+
+        public DbSet<BlacklistedAccessTokens> BlacklistedAccessTokens { get; set; }
 
         public FantasyLandDbContext(DbContextOptions<FantasyLandDbContext> options) : base(options)
         {
