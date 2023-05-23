@@ -1,4 +1,4 @@
-﻿using Models.DTOs;
+﻿using Models.Entities;
 
 namespace Fantasy_Land_Web_Client.Interfaces
 {

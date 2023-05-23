@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Fantasy_Land_Web_Api.Interfaces;
+using Models.Entities;
 
 namespace Fantasy_Land_Web_Api.Controllers
 {
@@ -50,6 +51,13 @@ namespace Fantasy_Land_Web_Api.Controllers
         {
 
             Response.Cookies.Delete(Constants.XAccessToken, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                Secure = true
+            });
+
+            Response.Cookies.Delete(Constants.XRefreshToken, new CookieOptions
             {
                 HttpOnly = true,
                 SameSite = SameSiteMode.Strict,

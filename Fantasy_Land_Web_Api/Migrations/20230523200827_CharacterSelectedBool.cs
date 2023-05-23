@@ -5,14 +5,14 @@
 namespace FantasyLandWebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class fixes : Migration
+    public partial class CharacterSelectedBool : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
-                name: "RememberMe",
-                table: "AspNetUsers",
+                name: "IsSelected",
+                table: "Characters",
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
@@ -22,8 +22,8 @@ namespace FantasyLandWebApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "RememberMe",
-                table: "AspNetUsers");
+                name: "IsSelected",
+                table: "Characters");
         }
     }
 }

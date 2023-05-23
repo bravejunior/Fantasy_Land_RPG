@@ -1,9 +1,6 @@
 ﻿@using Models.Entities;
 @model User
 
-@{
-	ViewData["Title"] = "Home Page";
-}
 
 <div class="container">
 
@@ -12,16 +9,15 @@
 	<div class="right-banner-top"><div>c</div></div>
 
 	<div class="left-banner-mid"><div>d</div></div>
+
 	<div class="main-content">
-		@{
-			if (Model == null)
-			{
-				<div>false</div>
-			}
-			else
-			{
-				<div>true</div>
-			}
+		@if (Model == null)
+		{
+			<div>Null</div>
+		}
+		else
+		{
+			<div>Not null</div>
 		}
 	</div>
 
@@ -33,4 +29,3 @@
 
 
 </div>
-

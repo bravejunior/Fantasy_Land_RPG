@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Models.DTOs;
 using Models.Configurations;
 using System.Text;
 using Fantasy_Land_Web_Api.Token_Management;
 using Fantasy_Land_Web_Api.Interfaces;
 using Fantasy_Land_Web_Api.Middleware;
+using Models.Entities;
 
 namespace Fantasy_Land_Web_Api
 {
@@ -60,9 +60,9 @@ namespace Fantasy_Land_Web_Api
                         ValidAudience = builder.Configuration["JwtSettings:Audience"],
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = true,          //false för development, kan bli strul i dev environment
-                        ValidateAudience = true,        //gör det knas
-                        RequireExpirationTime = true,    //false för development, kan bli strul i dev environment - uppdatera när refresh token finns
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        RequireExpirationTime = true,
                         ValidateLifetime = true
                     };
                     jwt.Events = new JwtBearerEvents
@@ -98,6 +98,7 @@ namespace Fantasy_Land_Web_Api
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
+
 
             app.UseMiddleware<TokenRefreshMiddleware>();
 

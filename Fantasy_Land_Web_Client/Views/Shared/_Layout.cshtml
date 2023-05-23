@@ -1,4 +1,4 @@
-﻿@using Models.DTOs
+﻿@using Models.Entities;
 @model User
 
 <!DOCTYPE html>
@@ -37,7 +37,13 @@
 						else
 						{
 							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="Adventure" asp-action="Index">Go adventure</a>
+								<a class="nav-link text-dark" asp-area="" asp-controller="Game" asp-action="Index">Play</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Log out</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Character" asp-action="Index">Characters</a>
 							</li>
 
 						}

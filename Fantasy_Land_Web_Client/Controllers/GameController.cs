@@ -2,7 +2,8 @@
 
 namespace Fantasy_Land_Web_Client.Controllers
 {
-    public class AdventureController : Controller
+    [Route("play")]
+    public class GameController : Controller
     {
         public IActionResult Index()
         {

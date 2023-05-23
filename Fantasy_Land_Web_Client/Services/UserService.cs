@@ -1,5 +1,5 @@
 ﻿using Fantasy_Land_Web_Client.Interfaces;
-using Models.DTOs;
+using Models.Entities;
 using Newtonsoft.Json;
 
 namespace Fantasy_Land_Web_Client.Services

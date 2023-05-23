@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FantasyLandWebApi.Migrations
 {
     [DbContext(typeof(FantasyLandDbContext))]
-    [Migration("20230502081539_Initial2")]
-    partial class Initial2
+    [Migration("20230523182816_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,23 +158,6 @@ namespace FantasyLandWebApi.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Models.DTOs.Character", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CharacterName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Characters");
-                });
-
             modelBuilder.Entity("Models.DTOs.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
@@ -208,7 +191,84 @@ namespace FantasyLandWebApi.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("Models.DTOs.User", b =>
+            modelBuilder.Entity("Models.Entities.Character", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CharacterClassId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CharacterName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Charisma")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Constitution")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Dexterity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Intelligence")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Strength")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Wisdom")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterClassId");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Characters");
+                });
+
+            modelBuilder.Entity("Models.Entities.CharacterClass", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CharacterClasses");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("CharacterClass");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Models.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -291,6 +351,42 @@ namespace FantasyLandWebApi.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Models.Entities.Classes.Knight", b =>
+                {
+                    b.HasBaseType("Models.Entities.CharacterClass");
+
+                    b.Property<int>("CharismaBonus")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("Knight");
+                });
+
+            modelBuilder.Entity("Models.Entities.Classes.Berserker", b =>
+                {
+                    b.HasBaseType("Models.Entities.Classes.Knight");
+
+                    b.Property<int>("DamageBonus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DefencePenalty")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("Berserker");
+                });
+
+            modelBuilder.Entity("Models.Entities.Classes.Guardian", b =>
+                {
+                    b.HasBaseType("Models.Entities.Classes.Knight");
+
+                    b.Property<int>("DamagePenalty")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DefenceBonus")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("Guardian");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -302,7 +398,7 @@ namespace FantasyLandWebApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Models.DTOs.User", null)
+                    b.HasOne("Models.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -311,7 +407,7 @@ namespace FantasyLandWebApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Models.DTOs.User", null)
+                    b.HasOne("Models.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -326,7 +422,7 @@ namespace FantasyLandWebApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.DTOs.User", null)
+                    b.HasOne("Models.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -335,7 +431,7 @@ namespace FantasyLandWebApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Models.DTOs.User", null)
+                    b.HasOne("Models.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -344,13 +440,42 @@ namespace FantasyLandWebApi.Migrations
 
             modelBuilder.Entity("Models.DTOs.RefreshToken", b =>
                 {
-                    b.HasOne("Models.DTOs.User", "User")
+                    b.HasOne("Models.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Models.Entities.Character", b =>
+                {
+                    b.HasOne("Models.Entities.CharacterClass", "CharacterClass")
+                        .WithMany("Characters")
+                        .HasForeignKey("CharacterClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Entities.User", "Owner")
+                        .WithMany("Characters")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CharacterClass");
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("Models.Entities.CharacterClass", b =>
+                {
+                    b.Navigation("Characters");
+                });
+
+            modelBuilder.Entity("Models.Entities.User", b =>
+                {
+                    b.Navigation("Characters");
                 });
 #pragma warning restore 612, 618
         }
