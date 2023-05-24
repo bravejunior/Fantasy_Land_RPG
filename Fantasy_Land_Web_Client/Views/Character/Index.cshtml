@@ -1,6 +1,6 @@
-﻿@using Models.Entities;
-@model User
-
+﻿@{
+	var currentUser = ViewData["CurrentUser"] as Models.Entities.User;
+}
 
 <div class="container">
 
@@ -11,13 +11,9 @@
 	<div class="left-banner-mid"><div>d</div></div>
 
 	<div class="main-content">
-		@if (Model == null)
+		@if (currentUser != null)
 		{
-			<div>Null</div>
-		}
-		else
-		{
-			<div>Not null</div>
+			<a class="nav-link text-dark" asp-area="" asp-controller="Character" asp-action="CreateCharacter">Create Character</a>
 		}
 	</div>
 

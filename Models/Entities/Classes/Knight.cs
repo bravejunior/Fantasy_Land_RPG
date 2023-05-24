@@ -10,9 +10,6 @@ namespace Models.Entities.Classes
 {
     public class Knight : CharacterClass
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [SwaggerSchema(ReadOnly = true)]
-        public int Id { get; set; }
         public int CharismaBonus { get; set; }
     }
 }

@@ -10,9 +10,6 @@ namespace Models.Entities.Classes
 {
     public class Berserker : Knight
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [SwaggerSchema(ReadOnly = true)]
-        public int Id { get; set; }
         public int DamageBonus { get; set; }
         public int DefencePenalty { get; set; }
     }

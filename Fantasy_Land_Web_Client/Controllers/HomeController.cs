@@ -23,8 +23,8 @@ namespace Fantasy_Land_Web_Client.Controllers
 
         public async Task<IActionResult> IndexAsync()
         {
-            var user = ViewData["CurrentUser"];
-            return View(user);
+            //var user = ViewData["CurrentUser"];
+            return View();
         }
 
         public IActionResult Privacy()

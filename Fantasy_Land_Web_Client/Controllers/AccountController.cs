@@ -25,13 +25,11 @@ namespace Fantasy_Land_Web_Client.Controllers
             return View();
         }
 
-        [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
-        [HttpGet]
         public IActionResult Login()
         {
             return View();

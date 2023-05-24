@@ -1,6 +1,9 @@
 using Fantasy_Land_Web_Client.Action_filters;
 using Fantasy_Land_Web_Client.Interfaces;
 using Fantasy_Land_Web_Client.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Buffers;
 using Models.Configurations;
 using System.Net.Http.Headers;
 
@@ -27,14 +30,16 @@ namespace Fantasy_Land_Web_Client
                 RefreshTokenExpiration = 1440 // set the refresh token expiration time
             };
 
-            builder.Services.AddSingleton(jwtConfig);
-            builder.Services.AddScoped<CurrentUserActionFilter>();
-            builder.Services.AddScoped<IUserService, UserService>();
 
             builder.Services.AddControllers(options =>
             {
                 options.Filters.Add(typeof(CurrentUserActionFilter));
             });
+
+            builder.Services.AddSingleton(jwtConfig);
+            builder.Services.AddScoped<CurrentUserActionFilter>();
+            builder.Services.AddScoped<IUserService, UserService>();
+
 
 
             CustomHttpClient client = new CustomHttpClient(clientHandler);

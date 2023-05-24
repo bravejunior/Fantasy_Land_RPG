@@ -10,9 +10,6 @@ namespace Models.Entities.Classes
 {
     public class Guardian : Knight
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [SwaggerSchema(ReadOnly = true)]
-        public int Id { get; set; }
         public int DefenceBonus { get; set; }
         public int DamagePenalty { get; set; }
     }

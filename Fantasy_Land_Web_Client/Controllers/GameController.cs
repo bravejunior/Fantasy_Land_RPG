@@ -7,14 +7,7 @@ namespace Fantasy_Land_Web_Client.Controllers
     {
         public IActionResult Index()
         {
-            var user = ViewData["CurrentUser"];
-
-            if (user == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            return View(user);
+            return View();
         }
     }
 }

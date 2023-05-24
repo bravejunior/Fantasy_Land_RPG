@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
+using Models.DTOs;
 
 namespace Fantasy_Land_Web_Api.Controllers
 {
@@ -18,7 +19,6 @@ namespace Fantasy_Land_Web_Api.Controllers
             _dbContext = dbContext;
         }
 
-
         [HttpGet]
         [Route("characters")]
         public List<Character> GetAllCharacters()
@@ -27,11 +27,30 @@ namespace Fantasy_Land_Web_Api.Controllers
         }
 
         [HttpPost]
-        [Route("character")]
-        public void AddCharacter(Character character)
+        [Route("create-character")]
+        public void CreateCharacter(CharacterCreationDto dto)
         {
+            User user = _dbContext.Users.FirstOrDefault(p => p.UserName.Equals(dto.Username));
+
             if (ModelState.IsValid)
             {
+                Character character = new Character
+                {
+                    CharacterName = dto.CharacterName,
+                    Gender = dto.Gender,
+                    Strength = dto.Strength,
+                    Constitution = dto.Constitution,
+                    Dexterity = dto.Dexterity,
+                    Intelligence = dto.Intelligence,
+                    Wisdom = dto.Wisdom,
+                    Charisma = dto.Charisma,
+                    IsSelected = dto.IsSelected,
+                    Owner = user,
+                    Level = dto.Level,
+                    Experience = dto.Experience,
+                    CharacterClass = _dbContext.CharacterClasses.FirstOrDefault(p => p.Name.Equals(dto.ClassName))
+                };
+
                 _dbContext.Characters.Add(character);
                 _dbContext.SaveChanges();
             }

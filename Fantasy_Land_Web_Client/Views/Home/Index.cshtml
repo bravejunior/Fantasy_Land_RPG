@@ -1,5 +1,6 @@
-﻿@using Models.Entities;
-@model User
+﻿@{
+	var currentUser = ViewData["CurrentUser"] as Models.Entities.User;
+}
 
 @{
 	ViewData["Title"] = "Home Page";
@@ -14,7 +15,7 @@
 	<div class="left-banner-mid"><div>d</div></div>
 	<div class="main-content">
 		@{
-			if (Model == null)
+			if (currentUser == null)
 			{
 				<div>false</div>
 			}

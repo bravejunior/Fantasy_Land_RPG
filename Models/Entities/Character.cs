@@ -9,6 +9,8 @@ namespace Models.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [SwaggerSchema(ReadOnly = true)]
         public string Id { get; set; }
+        public int Level { get; set; }
+        public int Experience { get; set; }
         public string CharacterName { get; set; }
         public string Gender { get; set; }
         public int Strength { get; set; }

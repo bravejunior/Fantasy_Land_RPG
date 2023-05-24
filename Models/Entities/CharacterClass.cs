@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Models.Entities
 {
-    public abstract class CharacterClass
+    public class CharacterClass
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [SwaggerSchema(ReadOnly = true)]
