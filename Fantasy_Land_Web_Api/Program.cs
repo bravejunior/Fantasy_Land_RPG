@@ -24,7 +24,6 @@ namespace Fantasy_Land_Web_Api
             // Add services to the container.
 
             builder.Services.AddControllers();
-
             var secret = Environment.GetEnvironmentVariable("FANTASY_LAND_SECRET");
             var jwtConfig = new JwtConfig
             {

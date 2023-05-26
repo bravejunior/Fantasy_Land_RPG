@@ -1,90 +1,101 @@
 html {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 header {
-    display: grid;
-    background: rgb(112, 133, 150);
-    box-shadow: 0 10px 20px -10px black;
+  display: grid;
+  background-color: rgba(18, 10, 4, 0.3);
+  box-shadow: 0 10px 20px -10px black;
+}
+
+.navbar-brand {
+  font-family: "Alegreya Sans SC", sans-serif;
+  font-family: "Bebas Neue", sans-serif;
+  color: #c6d0d6 !important;
+}
+
+.nav-link {
+  color: #c6d0d6 !important;
 }
 
 @media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
+  html {
+    font-size: 16px;
+  }
 }
 
 html {
-    position: relative;
-    min-height: 100%;
+  position: relative;
+  min-height: 100%;
 }
 
 body {
-    margin-bottom: 60px;
-    background: rgb(108,125,140);
-    background: radial-gradient(circle, rgba(108,125,140,1) 0%, rgba(83,96,108,1) 89%);
+  margin-bottom: 60px;
+  background: rgb(108, 125, 140);
+  background: radial-gradient(
+    circle,
+    rgba(108, 125, 140, 1) 0%,
+    rgba(83, 96, 108, 1) 89%
+  );
 }
 
 .register-container {
-    width: 40%;
+  width: 40%;
 }
 
 .container {
-    display: grid;
-    width: 100vw;
-    height: 90vh;
-    padding-top: 0.5%;
-    grid-template-columns: 0.6fr 1.4fr 1.5fr 0.5fr;
-    grid-template-rows: 0.3fr 2.4fr 0.3fr;
-    gap: 0px 0px;
-    grid-auto-flow: row;
-    grid-template-areas:
-        "left-banner-top main-content-top main-content-top right-banner-top"
-        "left-banner-mid main-content main-content right-banner-mid"
-        "left-banner-bot main-content-bot main-content-bot right-banner-bot";
+  display: grid;
+  width: 100vw;
+  height: 90vh;
+  padding-top: 0.5%;
+  grid-template-columns: minmax(0.6fr 1.4fr 1.5fr 0.5fr);
+  grid-template-rows: minmax(0.3fr 2.4fr 0.3fr);
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "left-banner-top main-content-top main-content-top right-banner-top"
+    "left-banner-mid main-content main-content right-banner-mid"
+    "left-banner-bot main-content-bot main-content-bot right-banner-bot";
 }
 
 .main-content {
-    grid-area: main-content;
-    background: rgb(255, 255, 255);
-}
-
-.right-banner-mid {
-    grid-area: right-banner-mid;
-    background: rgb(240, 240, 240);
-}
-
-.left-banner-mid {
-    grid-area: left-banner-mid;
-    background: rgb(240, 240, 240);
-}
-
-.left-banner-top {
-    grid-area: left-banner-top;
-    background: rgb(220, 220, 220);
-}
-
-.left-banner-bot {
-    grid-area: left-banner-bot;
-    background: rgb(220, 220, 220);
-}
-
-.right-banner-bot {
-    grid-area: right-banner-bot;
-    background: rgb(220, 220, 220);
+  grid-area: main-content;
 }
 
 .main-content-bot {
-    grid-area: main-content-bot;
-    background: rgb(200, 200, 200);
+  grid-area: main-content-bot;
 }
 
 .main-content-top {
-    grid-area: main-content-top;
-    background: rgb(200, 200, 200);
+  grid-area: main-content-top;
+}
+
+.right-banner-mid {
+  grid-area: right-banner-mid;
+}
+
+.left-banner-mid {
+  grid-area: left-banner-mid;
+}
+
+.left-banner-top {
+  grid-area: left-banner-top;
+}
+
+.left-banner-bot {
+  grid-area: left-banner-bot;
+}
+
+.right-banner-bot {
+  grid-area: right-banner-bot;
 }
 
 .right-banner-top {
-    grid-area: right-banner-top;
-    background: rgb(220, 220, 220);
+  grid-area: right-banner-top;
+}
+
+@media only screen and (max-width: 300px) {
+}
+
+@media only screen and (min-width: 768px) {
 }

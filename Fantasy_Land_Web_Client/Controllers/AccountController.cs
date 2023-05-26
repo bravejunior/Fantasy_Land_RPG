@@ -36,7 +36,7 @@ namespace Fantasy_Land_Web_Client.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(UserRegisterViewModel viewModel)
+        public async Task<IActionResult> Register(UserRegisterDto viewModel)
         {
             if (ModelState.IsValid)
             {

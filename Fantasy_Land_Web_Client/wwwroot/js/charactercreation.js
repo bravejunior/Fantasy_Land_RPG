@@ -5,31 +5,33 @@ createApp({
     return {
       visible: false,
 
+      pointsLeft: 15,
+
       /*array containing attributes + currently chosen amount during character creation*/
       attributeAmount: [
         {
           attribute: "strength",
-          points: 8,
+          points: 10,
         },
         {
           attribute: "constitution",
-          points: 8,
+          points: 10,
         },
         {
           attribute: "dexterity",
-          points: 8,
+          points: 10,
         },
         {
           attribute: "intelligence",
-          points: 8,
+          points: 10,
         },
         {
           attribute: "wisdom",
-          points: 8,
+          points: 10,
         },
         {
           attribute: "charisma",
-          points: 8,
+          points: 10,
         },
       ],
 
@@ -75,8 +77,9 @@ createApp({
 
       while (i < this.attributeAmount.length && searching) {
         if (this.attributeAmount[i].attribute === attribute) {
-          if (this.attributeAmount[i].points < 18) {
+          if (this.attributeAmount[i].points < 18 && this.pointsLeft != 0) {
             this.attributeAmount[i].points++;
+            this.pointsLeft--;
           }
           searching = false;
         } else {
@@ -93,6 +96,7 @@ createApp({
         if (this.attributeAmount[i].attribute === attribute) {
           if (this.attributeAmount[i].points > 8) {
             this.attributeAmount[i].points--;
+            this.pointsLeft++;
           }
           searching = false;
         } else {
@@ -103,6 +107,15 @@ createApp({
   },
 
   computed: {
+    getPointsLeft() {
+      let pointsLeft = 10;
+
+      for (const i of this.attributeAmount) {
+        this.pointsLeft = this.pointsLeft - i.points;
+      }
+      return pointsLeft;
+    },
+
     getStrength() {
       let result = 0;
       for (const i of this.attributeAmount) {
@@ -111,7 +124,8 @@ createApp({
           break;
         }
       }
-      console.log("d");
+      // console.log(this.pointsLeft);
+      console.log(result);
       return result;
     },
 

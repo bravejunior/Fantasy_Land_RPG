@@ -1,0 +1,12 @@
+﻿body {
+    background-color: black;
+    background-image: url(../images/background-register.png);
+    background-size:cover;
+    background-position-y: -7em;
+}
+
+.image-button {
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
