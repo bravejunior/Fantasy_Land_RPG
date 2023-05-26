@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FantasyLandWebApi.Migrations
 {
     [DbContext(typeof(FantasyLandDbContext))]
-    [Migration("20230523182816_Initial")]
-    partial class Initial
+    [Migration("20230526192813_test")]
+    partial class test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -213,11 +213,20 @@ namespace FantasyLandWebApi.Migrations
                     b.Property<int>("Dexterity")
                         .HasColumnType("int");
 
+                    b.Property<int>("Experience")
+                        .HasColumnType("int");
+
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Intelligence")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Level")
                         .HasColumnType("int");
 
                     b.Property<string>("OwnerId")
@@ -287,20 +296,8 @@ namespace FantasyLandWebApi.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsPrivate")
                         .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -351,6 +348,27 @@ namespace FantasyLandWebApi.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Models.Images.NpcPortrait", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImageTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NpcPortraits");
+                });
+
             modelBuilder.Entity("Models.Entities.Classes.Knight", b =>
                 {
                     b.HasBaseType("Models.Entities.CharacterClass");
@@ -359,6 +377,15 @@ namespace FantasyLandWebApi.Migrations
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Knight");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Default knight",
+                            Name = "Knight",
+                            CharismaBonus = 1
+                        });
                 });
 
             modelBuilder.Entity("Models.Entities.Classes.Berserker", b =>
@@ -372,6 +399,17 @@ namespace FantasyLandWebApi.Migrations
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Berserker");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 3,
+                            Description = "Offensive knight",
+                            Name = "Berserker",
+                            CharismaBonus = 0,
+                            DamageBonus = 1,
+                            DefencePenalty = -1
+                        });
                 });
 
             modelBuilder.Entity("Models.Entities.Classes.Guardian", b =>
@@ -385,6 +423,17 @@ namespace FantasyLandWebApi.Migrations
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Guardian");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2,
+                            Description = "Defensive knight",
+                            Name = "Guardian",
+                            CharismaBonus = 0,
+                            DamagePenalty = -1,
+                            DefenceBonus = 1
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

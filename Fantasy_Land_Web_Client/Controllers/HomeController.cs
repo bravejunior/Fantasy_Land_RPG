@@ -1,10 +1,10 @@
 ﻿using Fantasy_Land_Web_Client.Interfaces;
 using Fantasy_Land_Web_Client.Viewmodels;
+using Fantasy_Land_Web_Client.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Models.DTOs;
-using Newtonsoft.Json;
+using Models.Images;
 using System.Diagnostics;
-using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace Fantasy_Land_Web_Client.Controllers
 {
@@ -21,10 +21,24 @@ namespace Fantasy_Land_Web_Client.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> IndexAsync()
         {
             //var user = ViewData["CurrentUser"];
-            return View();
+
+            // get all npc portraits
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            HttpResponseMessage response = await _httpclient.GetAsync("api/npc-portrait/npc-portraits");
+            string data = await response.Content.ReadAsStringAsync();
+            var list = JsonSerializer.Deserialize<List<NpcPortrait>>(data, options);
+
+            var viewModel = new HomeIndexViewModel { NpcPortrait = list };
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()

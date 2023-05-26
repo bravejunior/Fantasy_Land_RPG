@@ -1,15 +1,9 @@
 ﻿using Fantasy_Land_Web_Api.Context;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Models.DTOs;
 using Models.Configurations;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 using Fantasy_Land_Web_Api.Interfaces;
 using Models.Entities;
 
@@ -184,7 +178,7 @@ namespace Fantasy_Land_Web_Api.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] UserRegistrationRequestDto requestDto)
+        public async Task<IActionResult> Register([FromBody] UserRegisterDto requestDto)
         {
             //Validate incoming request
 
@@ -209,10 +203,6 @@ namespace Fantasy_Land_Web_Api.Controllers
 
                 var new_user = new User()
                 {
-
-                    FirstName = requestDto.FirstName,
-                    LastName = requestDto.LastName,
-                    Gender = requestDto.Gender,
                     UserName = requestDto.Username,
                     IsPrivate = requestDto.IsPrivate,
                     RememberMe = requestDto.RememberMe

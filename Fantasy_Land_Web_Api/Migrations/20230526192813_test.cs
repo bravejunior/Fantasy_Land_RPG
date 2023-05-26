@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FantasyLandWebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,9 +30,6 @@ namespace FantasyLandWebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RememberMe = table.Column<bool>(type: "bit", nullable: false),
                     IsPrivate = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -73,6 +70,20 @@ namespace FantasyLandWebApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CharacterClasses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NpcPortraits",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NpcPortraits", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -209,6 +220,8 @@ namespace FantasyLandWebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Level = table.Column<int>(type: "int", nullable: false),
+                    Experience = table.Column<int>(type: "int", nullable: false),
                     CharacterName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Strength = table.Column<int>(type: "int", nullable: false),
@@ -217,6 +230,7 @@ namespace FantasyLandWebApi.Migrations
                     Intelligence = table.Column<int>(type: "int", nullable: false),
                     Wisdom = table.Column<int>(type: "int", nullable: false),
                     Charisma = table.Column<int>(type: "int", nullable: false),
+                    IsSelected = table.Column<bool>(type: "bit", nullable: false),
                     CharacterClassId = table.Column<int>(type: "int", nullable: false),
                     OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -236,6 +250,21 @@ namespace FantasyLandWebApi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "CharacterClasses",
+                columns: new[] { "Id", "CharismaBonus", "Description", "Discriminator", "Name" },
+                values: new object[] { 1, 1, "Default knight", "Knight", "Knight" });
+
+            migrationBuilder.InsertData(
+                table: "CharacterClasses",
+                columns: new[] { "Id", "CharismaBonus", "DamagePenalty", "DefenceBonus", "Description", "Discriminator", "Name" },
+                values: new object[] { 2, 0, -1, 1, "Defensive knight", "Guardian", "Guardian" });
+
+            migrationBuilder.InsertData(
+                table: "CharacterClasses",
+                columns: new[] { "Id", "CharismaBonus", "DamageBonus", "DefencePenalty", "Description", "Discriminator", "Name" },
+                values: new object[] { 3, 0, 1, -1, "Offensive knight", "Berserker", "Berserker" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -312,6 +341,9 @@ namespace FantasyLandWebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Characters");
+
+            migrationBuilder.DropTable(
+                name: "NpcPortraits");
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");

@@ -475,3 +475,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+
+# custom
+Fantasy_Land_Web_client/wwwroot/images/

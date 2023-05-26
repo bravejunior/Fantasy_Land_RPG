@@ -3,21 +3,8 @@ using System.Text.RegularExpressions;
 
 namespace Models.DTOs
 {
-    public class UserRegisterViewModel
+    public class UserRegisterDto
     {
-        [Required(ErrorMessage = "Make sure you've entered your first name.")]
-        [StringLength(20, ErrorMessage = "First names may only contain a maximum of 20 characters.")]
-        [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Names may only contain the characters a-z.")]
-        public string FirstName { get; set; }
-
-        [Required(ErrorMessage = "Make sure you've entered your last name.")]
-        [StringLength(20, ErrorMessage = "Last names may only contain a maximum of 20 characters")]
-        [RegularExpression("^[a-zA-Z]+$", ErrorMessage = "Names may only contain the characters a-z.")]
-        public string LastName { get; set; }
-
-        [Required]
-        public string Gender { get; set; }
-
         [Required(ErrorMessage = "You're required to enter a username.")]
         [StringLength(20)]
         public string Username { get; set; }

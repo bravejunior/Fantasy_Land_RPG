@@ -1,0 +1,175 @@
+﻿body {
+  background-color: black;
+  background-image: url(../images/background.png);
+  background-position-y: -7em;
+}
+
+.main-content-items {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2em;
+  padding: 2em;
+}
+
+.about-distrea-image-small{
+  display:none;
+}
+
+.main-content-top {
+  margin-top: 2em;
+  background-color: rgba(18, 10, 4, 0.5);
+}
+
+.distrea-header,
+h2 {
+  font-family: "Playfair", serif;
+  color: #c6d0d6 !important;
+}
+
+.about-distrea{
+  align-content: space-around;
+}
+
+.about-distrea,
+h2 {
+  text-align: center;
+}
+
+.npc-portrait-medium {
+  width: 384px;
+  height: 576px;
+  border-radius: 1em;
+  box-shadow: 5px 8px 15px rgb(0, 0, 0);
+}
+
+.main-content {
+  grid-area: main-content, main-content-top;
+  background-color: rgba(18, 10, 4, 0.5);
+}
+
+.main-content-bot {
+  background-color: rgba(18, 10, 4, 0.5);
+}
+
+.right-banner-mid {
+  background-color: rgba(18, 10, 4, 0.5);
+}
+
+.left-banner-mid {
+  background-color: rgba(18, 10, 4, 0.5);
+}
+
+.left-banner-top {
+  margin-top: 2em;
+  background-color: rgba(18, 10, 4, 0.5);
+  border-top-left-radius: 3em;
+}
+
+.left-banner-bot {
+  background-color: rgba(18, 10, 4, 0.5);
+  border-bottom-left-radius: 3em;
+}
+
+.right-banner-bot {
+  background-color: rgba(18, 10, 4, 0.5);
+  border-bottom-right-radius: 3em;
+}
+
+.right-banner-top {
+  margin-top: 2em;
+  background-color: rgba(18, 10, 4, 0.5);
+  border-top-right-radius: 3em;
+}
+
+@media only screen and (max-width: 500px) {
+  .npc-portrait-medium {
+    box-shadow: -20px 5px 5px rgb(0, 0, 0);
+  }
+}
+
+@media only screen and (max-width: 1400px) {
+  .npc-portrait-medium {
+    width: 288px;
+    height: 432px;
+  }
+
+  .about-distrea-image {
+    width: 375px;
+    height: 432px;
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .npc-portrait-medium {
+    width: 216px;
+    height: 324px;
+  }
+
+  .about-distrea-image {
+    width: 375px;
+    height: 432px;
+  }
+
+  .main-content-top{
+    border-top-left-radius: 3em;
+    border-top-right-radius: 3em;
+  }
+
+  .main-content-bot{
+    border-bottom-left-radius: 3em;
+    border-bottom-right-radius: 3em;
+  }
+
+  .right-banner-mid, .right-banner-bot, .right-banner-top{
+    display:none;
+  }
+
+  .left-banner-mid, .left-banner-bot, .left-banner-top{
+    display:none;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+
+  .container{
+    justify-content: center;
+    /* width: 100vw;
+    height: 100vh; */
+    max-width: 95%;
+    height: 100%;
+  }
+
+  .npc-portrait-medium {
+    display: none;
+  }
+
+  .about-distrea-image{
+    display: none;
+  }
+
+  .about-distrea-image-small{
+    display:flex;
+  }
+
+  .main-content-items {
+    gap: 0em;
+    padding: 0em;
+    
+  }
+
+  .main-content{
+    border-radius: 3em;
+  }
+  
+  .right-banner-mid, .right-banner-bot, .right-banner-top{
+    display:none;
+  }
+
+  .left-banner-mid, .left-banner-bot, .left-banner-top{
+    display:none;
+  }
+
+
+  
+}
