@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Models.DTOs
+@{
 	var currentUser = ViewData["CurrentUser"] as Models.Entities.User;
 }
 
@@ -9,8 +10,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Distrea</title>
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
+
 	<link rel="stylesheet" href="~/Fantasy_Land_Web_Client.styles.css" asp-append-version="true" />
 
 	<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,6 +22,7 @@
 
 </head>
 <body>
+
 
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light box-shadow">
@@ -33,8 +37,12 @@
 
 						@if (currentUser == null)
 						{
-							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Log in</a>
+							<li class="nav-item dropdown">
+								<a class="nav-link text-dark dropdown-toggle" id="login-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Log in</a>
+								<div class="dropdown-menu" aria-labelledby="login-button">
+									@await Html.PartialAsync("~/Views/Account/Login.cshtml", new UserLoginViewModel())
+								</div>
+
 							</li>
 
 							<li class="nav-item">

@@ -1,38 +1,29 @@
 ﻿@using Models.DTOs
 @model UserLoginViewModel
 
+<head>
+	<link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+	@*	<meta name="viewport" content="width=device-width, initial-scale=1.0">*@
+</head>
+
+
 @{
 	var currentUser = ViewData["CurrentUser"] as Models.Entities.User;
 }
 
-<div asp-validation-summary="All" class="text-danger" data-valmsg-summary="true"></div>
-
-
+@*		<div asp-validation-summary="All" class="text-danger" data-valmsg-summary="true"></div>
+*@
 @if (currentUser == null)
 {
 	<div class="login-container">
-		<form method="post" asp-action="Login" class="login-form">
+		<form method="post" asp-action="Login" asp-controller="Account" class="login-form">
 
-			<div class="form-group">
-				<label for="username">Username</label>
-				<input asp-for="Username" type="text" class="form-control" id="InputUsername">
-			</div>
+			<input asp-for="Username" placeholder="Username" type="text" class="name" id="InputUsername">
 
-			<div class="form-group">
-				<label for="password">Password</label>
-				<input asp-for="Password" type="password" class="form-control" id="InputPassword" placeholder="Password">
-			</div>
+			<input asp-for="Password" placeholder="Password" type="password" class="password" id="InputPassword" placeholder="Password">
 
-			<div class="form-check">
-				<input asp-for="RememberMe" type="checkbox" class="form-check-input" id="InputRememberMe" checked>
-				<label class="form-check-label" for="RememberMe">Remember me</label>
-			</div>
-
-			<button type="submit" class="btn btn-primary">Submit</button>
-
-			<div>@ViewBag.Message</div>
+			<input type="submit" class="submit" value="Login">
 
 		</form>
 	</div>
-
 }

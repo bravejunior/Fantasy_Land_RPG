@@ -12,41 +12,61 @@
 </head>
 <body>
 
+	<div class="container">
 
-	@if (currentUser == null)
-	{
-		<div asp-validation-summary="All" class="text-danger"></div>
+		<div class="left-banner-top"><div></div></div>
+		<div class="main-content-top"><div></div></div>
+		<div class="right-banner-top"><div></div></div>
 
-		<div class="register-container">
-			<form method="post" asp-action="Register" class="register-form">
 
-				<div class="form-group">
-					<label for="username">Username</label>
-					<input asp-for="Username" type="text" class="form-control" id="InputUsername">
+
+		<div class="left-banner-mid"><div></div></div>
+		<div class="main-content">
+			<div class="main-content-items">
+
+				<div class="register-container">
+
+					@if (currentUser == null)
+					{
+						<div asp-validation-summary="All" class="text-danger"></div>
+						<form method="post" asp-action="Register" class="register-form">
+
+							<input asp-for="Username" placeholder="Username" type="text" class="name" id="InputUsername">
+
+							<input asp-for="Password" placeholder="Password" type="password" class="password" id="InputPassword" placeholder="Password">
+
+							<input asp-for="ConfirmPassword" placeholder="Confirm password" class="password" type="password" class="form-control" id="InputConfirmPassword" placeholder="Confirm Password">
+
+
+							<input type="submit" class="submit" value="Register">
+
+							<div class="form-check">
+								<input asp-for="RememberMe" type="checkbox" class="form-check-input" id="InputRememberMe" checked>
+								<label class="form-check-label" for="RememberMe">Remember me</label>
+							</div>
+
+							<div>@ViewBag.Message</div>
+
+						</form>
+
+					}
 				</div>
 
-				<div class="form-group">
-					<label for="password">Password</label>
-					<input asp-for="Password" type="password" class="form-control" id="InputPassword" placeholder="Password">
-				</div>
 
-				<div class="form-group">
-					<label for="password">Confirm password</label>
-					<input asp-for="ConfirmPassword" type="password" class="form-control" id="InputConfirmPassword" placeholder="Confirm Password">
-				</div>
-
-				<div class="form-check">
-					<input asp-for="RememberMe" type="checkbox" class="form-check-input" id="InputRememberMe" checked>
-					<label class="form-check-label" for="RememberMe">Remember me</label>
-				</div>
-
-				<button type="submit" class="image-button">
-					<img src="~/images/register/btn-create-account.png" alt="create-account-button">
-				</button>
-
-			</form>
-
+			</div>
 		</div>
-	}
+		<div class="right-banner-mid"><div></div></div>
 
+
+
+		<div class="left-banner-bot"><div></div></div>
+		<div class="main-content-bot"><div></div></div>
+		<div class="right-banner-bot"><div></div></div>
+
+
+
+	</div>
+
+	<script src="~/js/index.js"></script>
 </body>
+

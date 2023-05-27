@@ -6,6 +6,7 @@ using System.Security.Claims;
 using Newtonsoft.Json;
 using Models.DTOs;
 using Models.Configurations;
+using Fantasy_Land_Web_Client.ViewModels;
 
 namespace Fantasy_Land_Web_Client.Controllers
 {
@@ -33,6 +34,12 @@ namespace Fantasy_Land_Web_Client.Controllers
         public IActionResult Login()
         {
             return View();
+        }
+
+		[HttpGet]
+        public IActionResult LoginDropdown()
+        {
+            return PartialView("Login");
         }
 
         [HttpPost]
@@ -84,7 +91,7 @@ namespace Fantasy_Land_Web_Client.Controllers
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
                     var result = JsonConvert.DeserializeObject<RefreshTokenResponseDto>(responseContent);
-                    
+
 
                     return RedirectToAction("Index", "Home");
                 }

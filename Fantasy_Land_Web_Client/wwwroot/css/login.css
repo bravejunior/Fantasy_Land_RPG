@@ -103,9 +103,3 @@ input[type="submit"] {
     font-size: large;
 }
 
-
-@media only screen and (max-width: 768px) {
-    .container{
-        justify-content:normal;
-    }
-}
