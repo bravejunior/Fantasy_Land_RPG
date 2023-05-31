@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FantasyLandWebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class test : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -70,20 +70,6 @@ namespace FantasyLandWebApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CharacterClasses", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "NpcPortraits",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ImageTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NpcPortraits", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -216,13 +202,33 @@ namespace FantasyLandWebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Portrait",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    CharacterClassId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Portrait", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Portrait_CharacterClasses_CharacterClassId",
+                        column: x => x.CharacterClassId,
+                        principalTable: "CharacterClasses",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Characters",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Level = table.Column<int>(type: "int", nullable: false),
                     Experience = table.Column<int>(type: "int", nullable: false),
-                    CharacterName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Strength = table.Column<int>(type: "int", nullable: false),
                     Constitution = table.Column<int>(type: "int", nullable: false),
@@ -231,6 +237,7 @@ namespace FantasyLandWebApi.Migrations
                     Wisdom = table.Column<int>(type: "int", nullable: false),
                     Charisma = table.Column<int>(type: "int", nullable: false),
                     IsSelected = table.Column<bool>(type: "bit", nullable: false),
+                    PortraitId = table.Column<int>(type: "int", nullable: false),
                     CharacterClassId = table.Column<int>(type: "int", nullable: false),
                     OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -247,6 +254,31 @@ namespace FantasyLandWebApi.Migrations
                         name: "FK_Characters_CharacterClasses_CharacterClassId",
                         column: x => x.CharacterClassId,
                         principalTable: "CharacterClasses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Characters_Portrait_PortraitId",
+                        column: x => x.PortraitId,
+                        principalTable: "Portrait",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Npc",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PortraitId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Npc", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Npc_Portrait_PortraitId",
+                        column: x => x.PortraitId,
+                        principalTable: "Portrait",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -316,6 +348,21 @@ namespace FantasyLandWebApi.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Characters_PortraitId",
+                table: "Characters",
+                column: "PortraitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Npc_PortraitId",
+                table: "Npc",
+                column: "PortraitId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Portrait_CharacterClassId",
+                table: "Portrait",
+                column: "CharacterClassId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserId",
                 table: "RefreshTokens",
                 column: "UserId");
@@ -343,7 +390,7 @@ namespace FantasyLandWebApi.Migrations
                 name: "Characters");
 
             migrationBuilder.DropTable(
-                name: "NpcPortraits");
+                name: "Npc");
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");
@@ -352,10 +399,13 @@ namespace FantasyLandWebApi.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "CharacterClasses");
+                name: "Portrait");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "CharacterClasses");
         }
     }
 }

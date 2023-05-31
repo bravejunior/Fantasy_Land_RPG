@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Models.Entities.Characters;
 
 namespace Models.Entities
 {
@@ -10,8 +11,6 @@ namespace Models.Entities
         public bool IsPrivate { get; set; }
 
 
-        public virtual ICollection<Character> Characters { get; set; }
-
-
+        public virtual ICollection<PlayerCharacter> Characters { get; set; }
     }
 }

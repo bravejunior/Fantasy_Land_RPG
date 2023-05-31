@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Fantasy_Land_Web_Client.ViewModels.CharacterIndexViewModel
+
+@{
 	var currentUser = ViewData["CurrentUser"] as Models.Entities.User;
 }
 <body>
@@ -13,6 +15,21 @@
 		<div class="main-content">
 			@if (currentUser != null)
 			{
+				if (Model.Characters != null)
+				{
+					foreach (var c in Model.Characters)
+					{
+						<div>@c.Name</div>
+						foreach (var p in @c.CharacterClass.Portraits)
+						{
+							if (p.Id == c.CharacterClass.Id)
+							{
+								string base64String = Convert.ToBase64String(p.ImageData);
+								<img class="character-portrait-medium" src="data:image/png;base64,@base64String" alt="character-portrait" />
+							}
+						}
+					}
+				}
 				<a class="nav-link text-dark" asp-area="" asp-controller="Character" asp-action="CreateCharacter">Create Character</a>
 			}
 		</div>

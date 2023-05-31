@@ -4,6 +4,6 @@ namespace Fantasy_Land_Web_Client.ViewModels
 {
     public class HomeIndexViewModel
     {
-        public List<NpcPortrait> NpcPortrait { get; set; }
+        public List<Portrait> NpcPortrait { get; set; }
     }
 }

@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 using Models.DTOs;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using Models.Entities.Characters;
 
 namespace Fantasy_Land_Web_Api.Controllers
 {
@@ -21,9 +25,15 @@ namespace Fantasy_Land_Web_Api.Controllers
 
         [HttpGet]
         [Route("characters")]
-        public List<Character> GetAllCharacters()
+        public List<PlayerCharacter> GetCharacters(string username)
         {
-            return _dbContext.Characters.ToList();
+            var characters = _dbContext.Characters
+                //.Include(c => c.CharacterClass)
+                //.ThenInclude(cc => cc.CharacterPortraits)
+                .Where(p => p.Owner.UserName.Equals(username))
+                .ToList();
+
+            return characters;
         }
 
         [HttpPost]
@@ -34,9 +44,9 @@ namespace Fantasy_Land_Web_Api.Controllers
 
             if (ModelState.IsValid)
             {
-                Character character = new Character
+                PlayerCharacter character = new PlayerCharacter
                 {
-                    CharacterName = dto.CharacterName,
+                    Name = dto.CharacterName,
                     Gender = dto.Gender,
                     Strength = dto.Strength,
                     Constitution = dto.Constitution,

@@ -28,7 +28,7 @@ namespace Fantasy_Land_Web_Api
             var jwtConfig = new JwtConfig
             {
                 Secret = secret,
-                AccessTokenExpiration = 1, // set the access token expiration time
+                AccessTokenExpiration = 5, // set the access token expiration time
                 RefreshTokenExpiration = 1440 // set the refresh token expiration time
             };
 
@@ -86,7 +86,7 @@ namespace Fantasy_Land_Web_Api
                 options.Password.RequiredUniqueChars = 1;
             });
 
-            //gör så routing blir endast lowercase
+            //make routing lowercase only
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
             builder.Services.AddSwaggerGen(options =>

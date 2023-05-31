@@ -1,4 +1,6 @@
-﻿using Swashbuckle.AspNetCore.Annotations;
+﻿using Models.Entities.Characters;
+using Models.Images;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.Entities
+namespace Models.Entities.Classes
 {
-    public class CharacterClass
+    public class Profession
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [SwaggerSchema(ReadOnly = true)]
@@ -16,7 +18,9 @@ namespace Models.Entities
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public virtual ICollection<Character> Characters { get; set; }
+
+        public virtual ICollection<ProfessionProgression> ProfessionProgression { get; } = new List<ProfessionProgression>();
+        public virtual ICollection<PlayerCharacter> PlayerCharacters { get; set; }
 
     }
 }

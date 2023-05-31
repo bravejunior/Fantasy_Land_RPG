@@ -24,7 +24,7 @@ namespace Fantasy_Land_Web_Client.Controllers
         [HttpGet]
         public async Task<IActionResult> IndexAsync()
         {
-            //var user = ViewData["CurrentUser"];
+            var user = ViewData["CurrentUser"];
 
             // get all npc portraits
             var options = new JsonSerializerOptions
@@ -32,9 +32,9 @@ namespace Fantasy_Land_Web_Client.Controllers
                 PropertyNameCaseInsensitive = true
             };
 
-            HttpResponseMessage response = await _httpclient.GetAsync("api/npc-portrait/npc-portraits");
+            HttpResponseMessage response = await _httpclient.GetAsync("api/portrait/npc-portraits");
             string data = await response.Content.ReadAsStringAsync();
-            var list = JsonSerializer.Deserialize<List<NpcPortrait>>(data, options);
+            var list = JsonSerializer.Deserialize<List<Portrait>>(data, options);
 
             var viewModel = new HomeIndexViewModel { NpcPortrait = list };
 

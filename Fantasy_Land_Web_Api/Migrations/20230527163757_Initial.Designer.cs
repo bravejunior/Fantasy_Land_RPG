@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FantasyLandWebApi.Migrations
 {
     [DbContext(typeof(FantasyLandDbContext))]
-    [Migration("20230526192813_test")]
-    partial class test
+    [Migration("20230527163757_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -200,10 +200,6 @@ namespace FantasyLandWebApi.Migrations
                     b.Property<int>("CharacterClassId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CharacterName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Charisma")
                         .HasColumnType("int");
 
@@ -229,9 +225,16 @@ namespace FantasyLandWebApi.Migrations
                     b.Property<int>("Level")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OwnerId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PortraitId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Strength")
                         .HasColumnType("int");
@@ -244,6 +247,8 @@ namespace FantasyLandWebApi.Migrations
                     b.HasIndex("CharacterClassId");
 
                     b.HasIndex("OwnerId");
+
+                    b.HasIndex("PortraitId");
 
                     b.ToTable("Characters");
                 });
@@ -275,6 +280,26 @@ namespace FantasyLandWebApi.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("CharacterClass");
 
                     b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Models.Entities.Npc", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PortraitId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PortraitId");
+
+                    b.ToTable("Npc");
                 });
 
             modelBuilder.Entity("Models.Entities.User", b =>
@@ -348,13 +373,16 @@ namespace FantasyLandWebApi.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Models.Images.NpcPortrait", b =>
+            modelBuilder.Entity("Models.Images.Portrait", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CharacterClassId")
+                        .HasColumnType("int");
 
                     b.Property<byte[]>("ImageData")
                         .IsRequired()
@@ -366,7 +394,9 @@ namespace FantasyLandWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NpcPortraits");
+                    b.HasIndex("CharacterClassId");
+
+                    b.ToTable("Portrait");
                 });
 
             modelBuilder.Entity("Models.Entities.Classes.Knight", b =>
@@ -512,17 +542,52 @@ namespace FantasyLandWebApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Models.Images.Portrait", "Portrait")
+                        .WithMany("Characters")
+                        .HasForeignKey("PortraitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("CharacterClass");
 
                     b.Navigation("Owner");
+
+                    b.Navigation("Portrait");
+                });
+
+            modelBuilder.Entity("Models.Entities.Npc", b =>
+                {
+                    b.HasOne("Models.Images.Portrait", "Portrait")
+                        .WithMany()
+                        .HasForeignKey("PortraitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Portrait");
+                });
+
+            modelBuilder.Entity("Models.Images.Portrait", b =>
+                {
+                    b.HasOne("Models.Entities.CharacterClass", "CharacterClass")
+                        .WithMany("Portraits")
+                        .HasForeignKey("CharacterClassId");
+
+                    b.Navigation("CharacterClass");
                 });
 
             modelBuilder.Entity("Models.Entities.CharacterClass", b =>
                 {
                     b.Navigation("Characters");
+
+                    b.Navigation("Portraits");
                 });
 
             modelBuilder.Entity("Models.Entities.User", b =>
+                {
+                    b.Navigation("Characters");
+                });
+
+            modelBuilder.Entity("Models.Images.Portrait", b =>
                 {
                     b.Navigation("Characters");
                 });
