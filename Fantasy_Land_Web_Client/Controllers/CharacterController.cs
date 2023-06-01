@@ -2,7 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs;
 using Models.Entities;
+using Models.Entities._PlayerCharacter;
+using Models.Images;
+using Newtonsoft.Json;
 using System.Text.Json;
+using System.Web;
 
 namespace Fantasy_Land_Web_Client.Controllers
 {
@@ -16,9 +20,28 @@ namespace Fantasy_Land_Web_Client.Controllers
             this._httpClient = httpClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var user = (User)ViewData["CurrentUser"];
+
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var uri = "https://localhost:7290/api/character/characters";
+            UriBuilder builder = new UriBuilder(uri);
+            builder.Query = "username=" + user.UserName;
+
+            var response = await _httpClient.GetAsync(builder.Uri);
+            string responseContent = await response.Content.ReadAsStringAsync();
+            var characterList = JsonConvert.DeserializeObject<List<PlayerCharacter>>(responseContent);
+            var viewModel = new CharacterIndexViewModel
+            {
+                Characters = characterList
+            };
+
+            return View(viewModel);
         }
 
         [Route("create-character")]
@@ -34,17 +57,19 @@ namespace Fantasy_Land_Web_Client.Controllers
 
             if (ModelState.IsValid && user.UserName == viewModel.CharacterCreationDto.Username)
             {
+                var uri = "api/character/create-character";
                 CharacterCreationDto dto = viewModel.CharacterCreationDto;
                 dto.Username = viewModel.CharacterCreationDto.Username;
-                var uri = "api/character/create-character";
 
-                string data = JsonSerializer.Serialize(viewModel.CharacterCreationDto, new JsonSerializerOptions
+                string data = System.Text.Json.JsonSerializer.Serialize(dto, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
+
                 var contentData = new StringContent(data, System.Text.Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _httpClient.PostAsync(uri, contentData);
+                var a = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -61,5 +86,6 @@ namespace Fantasy_Land_Web_Client.Controllers
         {
             return View();
         }
+
     }
 }

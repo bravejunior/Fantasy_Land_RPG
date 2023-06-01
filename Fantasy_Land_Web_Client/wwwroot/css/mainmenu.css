@@ -1,0 +1,48 @@
+﻿body {
+  color: rgb(255, 255, 255);
+}
+
+#main-menu-container {
+  text-align: center;
+  padding: 50px;
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  font-weight: 300;
+  font-size: 26px;
+}
+
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 100;
+  color: rgb(255, 255, 255);
+  border: none;
+  background-color: inherit;
+  padding: 14px 28px;
+  font-size: 20px;
+  cursor: pointer;
+  display: inline-block;
+}
+/* 
+button:hover {
+  background: #eee;
+} */
+/* 
+button-solid:focus {
+    border: none;
+    outline: none;
+} */
+
+/* button:focus {
+  background: #ffffff;
+} */
+
+button:hover {
+  color: black;
+}

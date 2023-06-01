@@ -15,8 +15,8 @@
 </head>
 
 <body>
-	<div id="index-container">
-		<div class="container">
+	<div class="container">
+		<div id="index-container">
 
 			<div class="left-banner-top"><div></div></div>
 			<div class="main-content-top"><div></div></div>
@@ -28,19 +28,19 @@
 			<div class="main-content">
 				<div class="main-content-items">
 					<div class="about-distrea">
-@*						<h2 class="distrea-header">Distrea</h2>
+						@*						<h2 class="distrea-header">Distrea</h2>
 						<p>Distrea transports you to a dark and unforgiving realm shrouded in darkness where the weight of history hang heavy in the air. Within its unforgiving embrace, the indomitable human spirit and resilience stands as a beacon of hope, clashing against the relentless tides of fate. Navigate a treacherous political landscape and unravel the tangled mysteries that grip this land, as sinister forces lurk in the shadows. In Distrea, courage and cunning will be your greatest weapons as you navigate a world teetering on the brink of chaos.</p>
-*@						<img class="about-distrea-image" src="./images/about-distrea-image.png" alt="about-distrea" />
+						*@						<img class="about-distrea-image" src="./images/about-distrea-image.png" alt="about-distrea" />
 						<img class="about-distrea-image-small" src="./images/about-distrea-image-small.png" alt="about-distrea" />
 					</div>
 
-					@{
-						Random random = new Random();
-						var n = random.Next(0, Model.NpcPortrait.Count);
-						string base64String = Convert.ToBase64String(Model.NpcPortrait[n].ImageData);
-						<img class="npc-portrait-medium" src="data:image/png;base64,@base64String" alt="npc-image" />
+					@*					@{
+					Random random = new Random();
+					var n = random.Next(0, Model.NpcPortrait.Count);
+					string base64String = Convert.ToBase64String(Model.NpcPortrait[n].ImageData);
+					<img class="npc-portrait-medium" src="data:image/png;base64,@base64String" alt="npc-image" />
 					}
-
+					*@
 				</div>
 			</div>
 			<div class="right-banner-mid"><div></div></div>

@@ -4,6 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.Entities;
 using Models.DTOs;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using Models.Entities._PlayerCharacter;
+using Models.Entities._Ability;
 
 namespace Fantasy_Land_Web_Api.Controllers
 {
@@ -21,9 +26,15 @@ namespace Fantasy_Land_Web_Api.Controllers
 
         [HttpGet]
         [Route("characters")]
-        public List<Character> GetAllCharacters()
+        public List<PlayerCharacter> GetCharacters(string username)
         {
-            return _dbContext.Characters.ToList();
+            var characters = _dbContext.Characters
+                //.Include(c => c.CharacterClass)
+                //.ThenInclude(cc => cc.CharacterPortraits)
+                .Where(p => p.Owner.UserName.Equals(username))
+                .ToList();
+
+            return characters;
         }
 
         [HttpPost]
@@ -34,26 +45,45 @@ namespace Fantasy_Land_Web_Api.Controllers
 
             if (ModelState.IsValid)
             {
-                Character character = new Character
+                PlayerCharacter character = new PlayerCharacter
                 {
-                    CharacterName = dto.CharacterName,
+                    Name = dto.CharacterName,
                     Gender = dto.Gender,
-                    Strength = dto.Strength,
-                    Constitution = dto.Constitution,
-                    Dexterity = dto.Dexterity,
-                    Intelligence = dto.Intelligence,
-                    Wisdom = dto.Wisdom,
-                    Charisma = dto.Charisma,
-                    IsSelected = dto.IsSelected,
                     Owner = user,
                     Level = dto.Level,
                     Experience = dto.Experience,
-                    CharacterClass = _dbContext.CharacterClasses.FirstOrDefault(p => p.Name.Equals(dto.ClassName))
+                    Profession = _dbContext.Professions.FirstOrDefault(p => p.Name.Equals(dto.ProfessionName)),
+                    PlayerCharacterAttributes = new List<PlayerCharacterAttribute>()
                 };
+
+                foreach (var name in dto.AttributeNames)
+                {
+                    var attribute = _dbContext.Attributes.FirstOrDefault(p => p.Name.Equals(name));
+                    if (attribute != null)
+                    {
+                        int p = 0;
+
+                        // get amount of points for each attribute
+                        if (dto.AttributePoints.TryGetValue(name, out int value))
+                        {
+                            p = value;
+                        }
+
+                        var characterAttribute = new PlayerCharacterAttribute
+                        {
+                            PlayerCharacter = character,
+                            Attribute = attribute,
+                            Points = p
+                        };
+
+                        character.PlayerCharacterAttributes.Add(characterAttribute);
+                    }
+                }
 
                 _dbContext.Characters.Add(character);
                 _dbContext.SaveChanges();
             }
         }
+
     }
 }

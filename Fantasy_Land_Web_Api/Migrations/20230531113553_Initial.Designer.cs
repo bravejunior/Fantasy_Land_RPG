@@ -4,6 +4,7 @@ using Fantasy_Land_Web_Api.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FantasyLandWebApi.Migrations
 {
     [DbContext(typeof(FantasyLandDbContext))]
-    partial class FantasyLandDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230531113553_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -785,9 +788,14 @@ namespace FantasyLandWebApi.Migrations
                     b.Property<int>("ProfessionId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProfessionId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProfessionId");
+
+                    b.HasIndex("ProfessionId1");
 
                     b.ToTable("ProfessionProgressions");
                 });
@@ -1057,10 +1065,14 @@ namespace FantasyLandWebApi.Migrations
             modelBuilder.Entity("Models.Entities._Profession.ProfessionProgression", b =>
                 {
                     b.HasOne("Models.Entities._Profession.Profession", "Profession")
-                        .WithMany("ProfessionProgression")
+                        .WithMany()
                         .HasForeignKey("ProfessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Models.Entities._Profession.Profession", null)
+                        .WithMany("ProfessionProgression")
+                        .HasForeignKey("ProfessionId1");
 
                     b.Navigation("Profession");
                 });
