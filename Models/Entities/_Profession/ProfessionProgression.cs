@@ -1,22 +1,22 @@
-﻿using System;
+﻿using Models.Entities._Ability;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.Entities.Classes
+namespace Models.Entities._Profession
 {
     public class ProfessionProgression
     {
         public int Id { get; set; }
         public int Level { get; set; }
-        public int Points { get; set; }
-        public int ProfessionId { get; set; }
+        public int AttributePoints { get; set; }
+        public int AbilityId { get; set; }
+        public Ability Ability { get; set; }
+
+
         public Profession Profession { get; set; }
-
-
-
-        // classid & skillid
 
     }
 }

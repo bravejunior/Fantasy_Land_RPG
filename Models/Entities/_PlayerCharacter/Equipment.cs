@@ -1,6 +1,6 @@
-﻿using Models.Entities.Characters;
+﻿using Models.Entities._Item;
 
-namespace Models.Entities.Character
+namespace Models.Entities._PlayerCharacter
 {
     public class Equipment
     {
@@ -13,7 +13,7 @@ namespace Models.Entities.Character
 
 
         //character id
-        public int PlayerCharacterId { get; set; }
+        public string PlayerCharacterId { get; set; }
         public PlayerCharacter PlayerCharacter { get; set; }
 
 

@@ -1,11 +1,11 @@
-﻿using Models.Entities.Abilities;
-using Models.Entities.Classes;
+﻿using Models.Entities._Ability;
+using Models.Entities._Profession;
 using Models.Images;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Models.Entities.Characters
+namespace Models.Entities._PlayerCharacter
 {
     public class PlayerCharacter
     {
@@ -18,19 +18,22 @@ namespace Models.Entities.Characters
         public int Experience { get; set; }
         public int CurrentPerseverance { get; set; }
         public int MaxPerseverance { get; set; }
+        public byte[] Portrait { get; set; }
 
 
 
 
 
         public virtual ICollection<PlayerCharacterCapability> PlayerCharacterCapabilities { get; set; }
-        public virtual ICollection<PlayerCharacterAbility> PlayerCharacterAbilities { get; set; }
-        public virtual ICollection<Skill> Skills { get; } = new List<Skill>();
+        //public virtual ICollection<ProfesssionAbility> PlayerCharacterAbilities { get; set; }
+        public virtual ICollection<PlayerCharacterAttribute> PlayerCharacterAttributes { get; set; }
 
+        public virtual ICollection<PlayerCharacterSkill> PlayerCharacterSkills { get; set; }
+        //public virtual ICollection<Ability> Skills { get; } = new List<Ability>();
 
-        public virtual Portrait Portrait { get; set; }
-        public int PortraitId { get; set; }
-
+        public int FactionId { get; set; }
+        [ForeignKey(nameof(FactionId))]
+        public virtual Faction Faction { get; set; }
 
         public int ProfessionId { get; set; }
         [ForeignKey(nameof(ProfessionId))]

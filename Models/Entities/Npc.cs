@@ -10,12 +10,14 @@ namespace Models.Entities
         [SwaggerSchema(ReadOnly = true)]
         public string Id { get; set; }
         public string Name { get; set; }
+        public byte[] Portrait { get; set; }
 
 
 
-        public int PortraitId { get; set; }
-        public virtual Portrait Portrait { get; set; }
 
+        public int FactionId { get; set; }
+        [ForeignKey(nameof(FactionId))]
+        public virtual Faction Faction { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using Models.Entities.Characters;
+﻿using Models.Entities._Ability;
+using Models.Entities._PlayerCharacter;
 using Models.Images;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.Entities.Classes
+namespace Models.Entities._Profession
 {
     public class Profession
     {
@@ -19,8 +20,9 @@ namespace Models.Entities.Classes
         public string Description { get; set; }
 
 
-        public virtual ICollection<ProfessionProgression> ProfessionProgression { get; } = new List<ProfessionProgression>();
+        public virtual ICollection<ProfessionProgression> ProfessionProgression { get; set; }
         public virtual ICollection<PlayerCharacter> PlayerCharacters { get; set; }
+        public virtual ICollection<Ability> Abilities { get; set; }
 
     }
 }

@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.Entities.Abilities
+namespace Models.Entities._Ability
 {
     public class Capability
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-
         public ICollection<PlayerCharacterCapability> PlayerCharacterCapabilities { get; set; }
 
     }

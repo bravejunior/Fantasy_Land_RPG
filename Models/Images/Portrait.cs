@@ -1,5 +1,5 @@
-﻿using Models.Entities.Characters;
-using Models.Entities.Classes;
+﻿using Models.Entities._PlayerCharacter;
+using Models.Entities._Profession;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;

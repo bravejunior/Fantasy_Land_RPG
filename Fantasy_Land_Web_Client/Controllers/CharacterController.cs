@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs;
 using Models.Entities;
-using Models.Entities.Characters;
+using Models.Entities._PlayerCharacter;
 using Models.Images;
 using Newtonsoft.Json;
 using System.Text.Json;

@@ -32,13 +32,15 @@ namespace Fantasy_Land_Web_Client.Controllers
                 PropertyNameCaseInsensitive = true
             };
 
-            HttpResponseMessage response = await _httpclient.GetAsync("api/portrait/npc-portraits");
-            string data = await response.Content.ReadAsStringAsync();
-            var list = JsonSerializer.Deserialize<List<Portrait>>(data, options);
+            //HttpResponseMessage response = await _httpclient.GetAsync("api/portrait/npc-portraits");
+            //string data = await response.Content.ReadAsStringAsync();
+            //var list = JsonSerializer.Deserialize<List<Portrait>>(data, options);
 
-            var viewModel = new HomeIndexViewModel { NpcPortrait = list };
+            //var viewModel = new HomeIndexViewModel { NpcPortrait = list };
 
-            return View(viewModel);
+            //return View(viewModel);
+
+            return View();
         }
 
         public IActionResult Privacy()

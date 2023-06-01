@@ -1,4 +1,4 @@
-﻿using Models.Entities.Characters;
+﻿using Models.Entities._PlayerCharacter;
 
 namespace Fantasy_Land_Web_Client.ViewModels
 {

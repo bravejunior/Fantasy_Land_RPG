@@ -17,10 +17,12 @@
 			{
 				if (Model.Characters != null)
 				{
-					foreach (var c in Model.Characters)
+					//print out a few portraits
+
+@*					foreach (var c in Model.Characters)
 					{
 						<div>@c.Name</div>
-						foreach (var p in @c.CharacterClass.Portraits)
+						foreach (var p in @c.Profession.Portraits)
 						{
 							if (p.Id == c.CharacterClass.Id)
 							{
@@ -28,7 +30,7 @@
 								<img class="character-portrait-medium" src="data:image/png;base64,@base64String" alt="character-portrait" />
 							}
 						}
-					}
+					}*@
 				}
 				<a class="nav-link text-dark" asp-area="" asp-controller="Character" asp-action="CreateCharacter">Create Character</a>
 			}

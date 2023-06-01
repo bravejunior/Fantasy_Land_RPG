@@ -132,11 +132,11 @@ h2 {
 @media only screen and (max-width: 768px) {
 
   .container{
-    justify-content: center;
-    /* width: 100vw;
-    height: 100vh; */
+/*    justify-content: center;
+    width: 100vw;
+    height: 100vh; 
     max-width: 95%;
-    height: 100%;
+    height: 100%;*/
   }
 
   .npc-portrait-medium {
@@ -148,7 +148,8 @@ h2 {
   }
 
   .about-distrea-image-small{
-    display:flex;
+    display:block;
+    max-width:100%;
   }
 
   .main-content-items {

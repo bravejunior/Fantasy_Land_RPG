@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.Entities.Item
+namespace Models.Entities._Item
 {
     public class Item
     {

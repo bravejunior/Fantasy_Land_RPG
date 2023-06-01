@@ -32,6 +32,18 @@ namespace Fantasy_Land_Web_Api
                 RefreshTokenExpiration = 1440 // set the refresh token expiration time
             };
 
+
+            //makes it so only the client can send AJAX requests to API
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("https://localhost:7223")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
             builder.Services.AddSingleton(jwtConfig);
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
@@ -95,6 +107,8 @@ namespace Fantasy_Land_Web_Api
             });
 
             var app = builder.Build();
+
+            app.UseCors();
 
             // Configure the HTTP request pipeline.
 
