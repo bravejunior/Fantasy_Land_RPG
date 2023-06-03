@@ -21,9 +21,8 @@
 
 			<div class="main-content">
 				<div class="menu-faded-background"></div>
-				<div id="main-menu-container">
-					@await Html.PartialAsync("~/Views/Game/PartialViews/_MainMenu.cshtml");
-				</div>
+				<div id="main-menu-container"></div>
+				<div id="create-character-container"></div>
 
 			</div>
 
@@ -35,9 +34,12 @@
 
 
 		</div>
-	</div>
 
+	</div>
 	@section scripts {
 		<script src="~/js/mainmenu.js"></script>
+		<script src="~/js/gameindex.js"></script>
+		<script src="~/js/createcharacter.js"></script>
 	}
+
 	</body>

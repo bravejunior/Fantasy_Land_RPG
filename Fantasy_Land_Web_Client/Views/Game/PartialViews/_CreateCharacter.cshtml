@@ -1,0 +1,26 @@
+﻿@using Models.DTOs
+@model CreateCharacterDataDto
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="~/css/charactercreation.css" asp-append-version="true" />
+</head>
+
+<body>
+	<div id="create-character-container">
+		@if (Model != null)
+		{
+			<h2>Create Character</h2>
+			<h3>Factions:</h3>
+			<ul>
+				@foreach (var faction in Model.Factions)
+				{
+					<li>@faction.Name</li>
+				}
+
+			</ul>
+			<button id="go-back-btn">Go Back</button>
+		}
+	</div>
+	<script src="~/js/createcharacter.js"></script>
+</body>

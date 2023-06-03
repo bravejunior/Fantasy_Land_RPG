@@ -1,17 +1,18 @@
-﻿$(document).ready(function() {
-    $('#play-game-btn').click(function() {
-        // Make an AJAX request to the Test() endpoint
-        $.ajax({
-            url: 'https://localhost:7290/api/game/test',
-            type: 'GET',
-            success: function(response) {
-                // Update the menu with the returned string
-                $('#main-menu-container').text(response);
-                $('#menu-container').text(response);
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
+﻿$(document).ready(function () {
+  $("#play-game-btn").click(function () {
+    // Make an AJAX request to the CreateCharacter endpoint
+    $.ajax({
+      url: "/create-character",
+      type: "GET",
+      success: function (response) {
+        // Update the create-character-container with the CreateCharacter partial view
+        $("#create-character-container").html(response);
+        // Hide the main-menu-container
+        $("#main-menu-container").hide();
+      },
+      error: function (error) {
+        console.log(error);
+      },
     });
+  });
 });
