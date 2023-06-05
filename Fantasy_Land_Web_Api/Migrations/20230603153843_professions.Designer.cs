@@ -4,6 +4,7 @@ using Fantasy_Land_Web_Api.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FantasyLandWebApi.Migrations
 {
     [DbContext(typeof(FantasyLandDbContext))]
-    partial class FantasyLandDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230603153843_professions")]
+    partial class professions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -760,13 +763,47 @@ namespace FantasyLandWebApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Portrait")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Professions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Diplomats possess a deep understanding of cultural nuances and a gift for effective communication. Their gameplay revolves around building bridges between factions, resolving disputes through diplomatic dialogue, and using their persuasive abilities to forge alliances and maintain peace. With a focus on tactful negotiations, cultural diplomacy, and effective mediation, diplomats excel at defusing tensions, promoting harmony, and ensuring the realm's stability.",
+                            Name = "Diplomat"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Inquisitors are relentless seekers of truth and justice, driven by a strong sense of righteousness. They possess sharp deductive skills and an unwavering determination to uncover the facts. Inquisitors specialize in uncovering hidden secrets, solving intricate puzzles, and bringing criminals to justice. With a focus on investigative techniques, logical reasoning, and keen observation, inquisitors excel at collecting evidence, interrogating suspects, and piecing together the truth behind mysterious events.",
+                            Name = "Inquisitor"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Historians are scholars and historians who delve into the rich tapestry of the realm's history and legends. They have a deep reverence for ancient knowledge and a thirst for uncovering forgotten truths. Historians specialize in researching ancient texts, deciphering cryptic symbols, and unlocking the secrets of the past. With a focus on historical research, mythological understanding, and archival exploration, historians excel at unearthing lost lore, decoding ancient prophecies, and unraveling the enigmatic mysteries of the realm's past.",
+                            Name = "Historian"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Orators are charismatic individuals gifted with the power of persuasion and the ability to captivate audiences with their words. They possess a natural eloquence and a magnetic presence that draws others to them. Orators specialize in delivering powerful speeches, swaying public opinion, and influencing important decision-makers. With a focus on public speaking, rhetorical finesse, and emotional intelligence, orators excel at inspiring others, rallying troops, and making impactful arguments that shape the realm's narrative.",
+                            Name = "Orator"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Survivors are hardened individuals who have endured countless trials and emerged stronger from the crucible of adversity. They possess unwavering determination and a resourceful nature. Survivors specialize in navigating dangerous environments, overcoming physical challenges, and outsmarting foes. With a focus on self-preservation, resilience, and adaptability, survivors excel at surviving in hostile territories, mastering survival skills, and finding creative solutions to seemingly insurmountable obstacles.",
+                            Name = "Survivor"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "Commanders are natural leaders who excel at taking charge and directing others with authority. They possess a commanding presence and the ability to inspire loyalty and respect from their subordinates. Commanders specialize in strategic planning, tactical decision-making, and mobilizing forces for battle. With a focus on leadership, coordination, and strategic thinking, commanders excel at organizing troops, devising battle strategies, and effectively deploying resources to achieve victory on the battlefield. They instill discipline and unity among their ranks, becoming the driving force behind the realm's military campaigns and ensuring the success of their missions.",
+                            Name = "Commander"
+                        });
                 });
 
             modelBuilder.Entity("Models.Entities._Profession.ProfessionProgression", b =>

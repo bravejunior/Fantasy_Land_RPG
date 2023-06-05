@@ -18,6 +18,7 @@ namespace Models.Entities._Profession
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public byte[] Portrait { get; set; }
 
 
         public virtual ICollection<ProfessionProgression> ProfessionProgression { get; set; }

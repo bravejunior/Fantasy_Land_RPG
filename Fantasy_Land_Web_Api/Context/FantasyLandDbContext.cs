@@ -66,9 +66,8 @@ namespace Fantasy_Land_Web_Api.Context
 
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<Knight>().HasData(new Knight { Id = 1, Name = "Knight", Description = "Default knight", CharismaBonus = 1 });
-            //modelBuilder.Entity<Guardian>().HasData(new Guardian { Id = 2, Name = "Guardian", Description = "Defensive knight", DefenceBonus = 1, DamagePenalty = -1 });
-            //modelBuilder.Entity<Berserker>().HasData(new Berserker { Id = 3, Name = "Berserker", Description = "Offensive knight", DamageBonus = 1, DefencePenalty = -1 });
+            //modelBuilder.Entity<Profession>().HasData(new Profession { Id = 1, Name = "", Description = "" });
+            //modelBuilder.Entity<Profession>().HasData(new Profession { Id = 1, Name = "", Description = "" });
 
         }
     }

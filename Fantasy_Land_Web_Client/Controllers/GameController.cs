@@ -20,17 +20,21 @@ namespace Fantasy_Land_Web_Client.Controllers
             return View();
         }
 
-        [Route("create-character")]
-        public async Task<IActionResult> CreateCharacterAsync()
+        private async Task<CreateCharacterDataDto> GetCharacterCreationDtoAsync()
         {
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
-
             HttpResponseMessage response = await _httpClient.GetAsync("api/game/create-character");
             string data = await response.Content.ReadAsStringAsync();
-            var dto = JsonSerializer.Deserialize<CreateCharacterDataDto>(data, options);
+            return JsonSerializer.Deserialize<CreateCharacterDataDto>(data, options);
+        }
+
+        [Route("create-character")]
+        public async Task<IActionResult> CreateCharacterAsync()
+        {
+            var dto = await GetCharacterCreationDtoAsync();
 
             var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 

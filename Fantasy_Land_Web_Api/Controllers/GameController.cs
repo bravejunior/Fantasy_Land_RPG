@@ -29,35 +29,13 @@ namespace Fantasy_Land_Web_Api.Controllers
         [Route("create-character")]
         public CreateCharacterDataDto GetCreateCharacterData()
         {
+            var dto = new CreateCharacterDataDto();
             var factions = _dbContext.Factions.ToList();
-            var dto = new CreateCharacterDataDto
-            {
-                Factions = factions
-            };
+            var professions = _dbContext.Professions.ToList();
+            dto.Factions = factions;
+            dto.Professions = professions;
 
-            var faction = new Faction
-            {
-                Id = 1,
-                Name = "Happy Faction",
-                Description = "The Happy Faction is a sklfnlkfnkldf ac askdm lasd."
-            };
 
-            var factionOne = new Faction
-            {
-                Id = 2,
-                Name = "Sad Faction",
-                Description = "The Sad Faction is a sklfnlkfnkldf ac askdm lasd."
-            };
-
-            var factionTwo = new Faction
-            {
-                Id = 3,
-                Name = "Angry Faction",
-                Description = "The Angry Faction is a sklfnlkfnkldf ac askdm lasd."
-            };
-            dto.Factions.Add(faction);
-            dto.Factions.Add(factionOne);
-            dto.Factions.Add(factionTwo);
             return dto;
         }
 

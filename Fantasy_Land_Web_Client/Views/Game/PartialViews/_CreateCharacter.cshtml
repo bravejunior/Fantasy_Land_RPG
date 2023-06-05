@@ -11,15 +11,22 @@
 		@if (Model != null)
 		{
 			<h2>Create Character</h2>
-			<h3>Factions:</h3>
-			<ul>
-				@foreach (var faction in Model.Factions)
+			<h3>Professions</h3>
+			<div class="create-character-profession-container">
+				@foreach (var profession in Model.Professions)
 				{
-					<li>@faction.Name</li>
+					string base64String = Convert.ToBase64String(profession.Portrait);
+					<div class="profession-container">
+						<img class="create-character-profession-icon" src="data:image/png;base64,@base64String" alt="@profession.Name-image" />
+						<div class="create-character-profession-name">@profession.Name</div>
+						<div class="create-character-profession-desc">@profession.Description</div>
+					</div>
 				}
-
-			</ul>
+			</div>
 			<button id="go-back-btn">Go Back</button>
+
+
+
 		}
 	</div>
 	<script src="~/js/createcharacter.js"></script>
