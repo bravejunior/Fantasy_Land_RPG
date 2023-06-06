@@ -1,0 +1,42 @@
+﻿.create-character-portrait-container {
+  display: grid;
+  justify-content: center;
+}
+
+.portrait-slider {
+  display: flex;
+  align-items: center;
+}
+
+.btn-left,
+.btn-right {
+  margin: 0 10px;
+}
+
+h2 {
+  font-weight: 100;
+  text-align: center;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+
+/* img {
+  width: 300px;
+  max-width: 100%;
+  box-shadow: rgb(0, 0, 0) 0px 0px 40px 10px;
+  border-radius: 5em;
+  justify-self: center;
+}
+
+.portrait {
+  display: grid;
+  justify-items: center;
+} */
+/* 
+.btn-left,
+.btn-right {
+  font-size: xx-large;
+  text-align: center;
+  width: 100%;
+}
+ */

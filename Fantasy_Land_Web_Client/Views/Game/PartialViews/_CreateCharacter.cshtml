@@ -10,24 +10,29 @@
 	<div id="create-character-container">
 		@if (Model != null)
 		{
-			<h2>Create Character</h2>
-			<h3>Professions</h3>
 			<div class="create-character-profession-container">
-				@foreach (var profession in Model.Professions)
-				{
-					string base64String = Convert.ToBase64String(profession.Portrait);
-					<div class="profession-container">
-						<img class="create-character-profession-icon" src="data:image/png;base64,@base64String" alt="@profession.Name-image" />
-						<div class="create-character-profession-name">@profession.Name</div>
-						<div class="create-character-profession-desc">@profession.Description</div>
+				<div class="profession-slider">
+					<button class="btn-left" onclick="plusDivs(-1)">&#10094;</button>
+					<div class="profession-items">
+						@foreach (var profession in Model.Professions)
+						{
+							string base64String = Convert.ToBase64String(profession.Portrait);
+							<div class="profession-container">
+								<div class="create-character-profession-name">@char.ToUpper(@profession.Name[0])@profession.Name.Substring(1)</div>
+								<img class="create-character-profession-icon" src="data:image/png;base64,@base64String" alt="@profession.Name-image" data-profession-name="@profession.Name" />
+								<div id="create-character-profession-desc" data-description="@profession.Description.Substring(0, @profession.Description.IndexOf('.') + 1)">@profession.Description.Substring(0, @profession.Description.IndexOf('.') + 1)</div>
+							</div>
+						}
 					</div>
-				}
+					<button class="btn-right" onclick="plusDivs(+1)">&#10095;</button>
+				</div>
 			</div>
+			<hr />
 			<button id="go-back-btn">Go Back</button>
-
-
-
+			<button id="next-btn">Next</button>
 		}
 	</div>
+
 	<script src="~/js/createcharacter.js"></script>
+	<script src="~/js/chooseprofession.js"></script>
 </body>

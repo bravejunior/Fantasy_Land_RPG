@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models.DTOs;
 using Models.Entities;
+using Models.Images;
 using System.Text.Json;
 
 namespace Fantasy_Land_Web_Client.Controllers
@@ -31,6 +32,7 @@ namespace Fantasy_Land_Web_Client.Controllers
             return JsonSerializer.Deserialize<CreateCharacterDataDto>(data, options);
         }
 
+
         [Route("create-character")]
         public async Task<IActionResult> CreateCharacterAsync()
         {
@@ -44,7 +46,7 @@ namespace Fantasy_Land_Web_Client.Controllers
             }
             else
             {
-                return PartialView("_MainMenu");
+                return PartialView("_Error");
             }
         }
 
@@ -59,8 +61,35 @@ namespace Fantasy_Land_Web_Client.Controllers
             }
             else
             {
-                return PartialView("_MainMenu");
+                return PartialView("_Error");
             }
+        }
+
+        [Route("choose-portrait")]
+        public async Task<IActionResult> ChoosePortrait()
+        {
+            var portraits = await GetPortraits();
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
+            if (isAjax)
+            {
+                return PartialView("/Views/Game/PartialViews/_ChoosePortrait.cshtml", portraits);
+            }
+            else
+            {
+                return PartialView("_Error");
+            }
+        }
+
+        private async Task<List<Portrait>> GetPortraits()
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            HttpResponseMessage response = await _httpClient.GetAsync("api/game/get-portraits");
+            string data = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<List<Portrait>>(data, options);
         }
     }
 }

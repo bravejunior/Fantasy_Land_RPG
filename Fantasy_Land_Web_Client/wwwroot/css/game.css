@@ -1,6 +1,5 @@
 ﻿body {
-    background-color: black;
-    background-image: url(..//images/play-background.png);
+    /* background-image: url(..//images/play-background.png); */
   }
 
 #game-container{
@@ -11,7 +10,7 @@
     grid-area: main-content;
 }
 
-.menu-faded-background{
+/* .menu-faded-background{
     opacity: 0.5;
     height: 60%;
     width: 60%;
@@ -22,11 +21,11 @@
     top: 0;
     bottom: 0;
     margin: auto;
-    border-radius: 4em;
+    border-radius: 100em;
     /* box-shadow: 0px 0px 15px 15px black; */
-    filter:blur(100px);
+    filter:blur(300px);
     z-index: -99;
-}
+} */
 
 .main-content-bot {
     grid-area: main-content-bot;

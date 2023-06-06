@@ -1,46 +1,207 @@
-﻿.attributes-container {
-    max-width: 100%;
-    margin-right: 1em;
+﻿.create-character-profession-container {
+  display: grid;
+  justify-content: center;
 }
 
-.col-12 {
-    margin: 0.6em;
+.profession-slider {
+  display: flex;
+  align-items: center;
 }
 
-.prevent-select {
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none; /* Standard syntax */
+.btn-left,
+.btn-right {
+  margin: 0 10px;
 }
 
-.text-dark {
-    width: 100px;
+img {
+  box-shadow: rgb(0, 0, 0) 0px 0px 40px 10px;
+  border-radius: 5em;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+  max-width: 300px;
 }
 
-.number-of-points {
-    width: 60px;
+.create-character-profession-name {
+  font-size: 1.5em;
+  font-weight: 300;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  text-align: center;
 }
 
+hr {
+  margin-top: 3em;
+}
+
+#create-character-profession-desc {
+  text-align: center;
+  height: 150px;
+  width: 300px;
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+/* @media (max-width: 992px) {
+  #create-character-profession-desc {
+    height: auto;
+  }
+} */
+
+@media (max-width: 768px) {
+  /* #create-character-profession-desc {
+    display: none;
+  } */
+/* 
+  img {
+    width: 60%;
+  } */
+}
+
+/*
 .create-character-profession-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-}
-
-.create-character-profession-icon {
-    align-self: center;
-    height: 300px;
+  display: grid;
+  justify-items: center;
 }
 
 .profession-container {
-    
 }
 
-.create-character-profession-desc {
-    text-align: center;
+.btn-left,
+.btn-right {
+  position: absolute;
 }
-.create-character-profession-name {
-    text-align: center;
+
+.btn-left{
+  bottom: 20em;
+  left: 35em;
 }
+
+.create-character-profession-icon {
+} */
+
+/* .container {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10em;
+  margin-top: 1em;
+  min-height: 100%;
+}
+
+#create-character-container {
+  display: block;
+  margin-top: 3em;
+  max-width: 100%;
+}
+
+img{
+  width: 300px;
+  max-width: 100%;
+  box-shadow: rgb(0, 0, 0) 0px 0px 40px 10px;
+  border-radius: 5em;
+}
+
+.profession-container{
+  display: grid;
+  justify-items: center;
+}
+
+.btn-left,
+.btn-right {
+  font-size: xx-large;
+  text-align: center;
+  width: 100%;
+} */
+
+/* .create-character-profession-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 130px);
+  grid-template-rows: repeat(auto-fill);
+  grid-auto-flow: row dense;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+  max-width: 100%;
+  justify-content: center;
+} */
+
+/* #create-character-profession-desc {
+  background-color: rgba(0, 0, 0, 0.9);
+  position: absolute; */
+/* offset: path('M 20 60 L 120 60 L 70 10 L 20 60')0% auto; */
+/* text-align: center;
+  display: none;
+  z-index: 1;
+  max-width: 100%;
+  max-width: 20em;
+  margin-top: 5em;
+}
+
+.create-character-profession-icon:hover {
+  box-shadow: rgb(0, 0, 0) 0px 0px 20px 1px;
+}
+
+.create-character-profession-icon:hover + #create-character-profession-desc {
+  display: block;
+}
+
+.create-character-profession-icon:focus + #create-character-profession-desc {
+  display: block;
+} */
+/* 
+.create-character-profession-icon:active {
+  box-shadow: rgb(0, 0, 0) 0px 0px 20px 1px;
+} */
+
+/* .create-character-profession-icon {
+  border-style: solid;
+  border-color: black;
+  max-width: 170px;
+  align-self: center;
+  max-width: 100%; */
+/* width: 100%; */
+/* height: 300px; */
+/* } */
+/* 
+.profession-container {
+    align-items: center;
+    justify-content: center;
+
+} */
+
+/* .create-character-profession-name {
+  font-size: 1.5em;
+  font-weight: 300;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  text-align: center;
+}
+
+@media only screen and (max-width: 501px) {
+  .create-character-profession-icon:hover + #create-character-profession-desc {
+    display: none;
+  }
+
+  .create-character-profession-icon:focus + #create-character-profession-desc {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  #create-character-profession-desc {
+    margin-top: 0em;
+  }
+}
+
+@media only screen and (max-width: 1400px) {
+  .create-character-profession-container {
+    display: grid;
+    grid-template-columns: repeat(2, 130px);
+    grid-auto-flow: row dense;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    max-width: 100%;
+    justify-content: center;
+  }
+
+
+} */

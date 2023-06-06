@@ -35,6 +35,7 @@ namespace Fantasy_Land_Web_Api.Context
         public DbSet<ProfessionProgression> ProfessionProgressions { get; set; }
         public DbSet<Faction> Factions { get; set; }
         public DbSet<Location> Locations { get; set; }
+        public DbSet<Portrait> Portraits { get; set; }
 
 
         public FantasyLandDbContext(DbContextOptions<FantasyLandDbContext> options) : base(options)

@@ -11,18 +11,8 @@ namespace Models.Images
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [SwaggerSchema(ReadOnly = true)]
         public int Id { get; set; }
-        public string ImageTitle { get; set; }
+        public string Gender { get; set; }
         public byte[] ImageData { get; set; }
-
-
-
-
-        public int? CharacterClassId { get; set; }
-        [JsonIgnore]
-        public virtual Profession? CharacterClass { get; set; }
-
-        [JsonIgnore]
-        public virtual ICollection<PlayerCharacter> Characters { get; set; }
 
     }
 }

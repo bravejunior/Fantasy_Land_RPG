@@ -2,6 +2,7 @@
   color: rgb(255, 255, 255);
 }
 
+
 #main-menu-container {
   text-align: center;
   padding: 50px;
@@ -29,20 +30,8 @@ button {
   cursor: pointer;
   display: inline-block;
 }
-/* 
-button:hover {
-  background: #eee;
-} */
-/* 
-button-solid:focus {
-    border: none;
-    outline: none;
-} */
-
-/* button:focus {
-  background: #ffffff;
-} */
 
 button:hover {
   color: black;
 }
+
