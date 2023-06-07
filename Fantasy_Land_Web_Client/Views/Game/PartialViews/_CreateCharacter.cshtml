@@ -12,7 +12,7 @@
 		{
 			<div class="create-character-profession-container">
 				<div class="profession-slider">
-					<button class="btn-left" onclick="plusDivs(-1)">&#10094;</button>
+					<button class="btn-left-profession" onclick="plusDivsProfession(-1)">&#10094;</button>
 					<div class="profession-items">
 						@foreach (var profession in Model.Professions)
 						{
@@ -24,7 +24,7 @@
 							</div>
 						}
 					</div>
-					<button class="btn-right" onclick="plusDivs(+1)">&#10095;</button>
+					<button class="btn-right-profession" onclick="plusDivsProfession(+1)">&#10095;</button>
 				</div>
 			</div>
 			<hr />
@@ -34,5 +34,4 @@
 	</div>
 
 	<script src="~/js/createcharacter.js"></script>
-	<script src="~/js/chooseprofession.js"></script>
 </body>

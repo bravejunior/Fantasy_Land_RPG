@@ -1,5 +1,7 @@
-﻿$(document).ready(function () {
-  $("#play-game-btn").click(function () {
+﻿/*
+
+$(document).ready(function () {
+  $("#create-character-btn").click(function () {
     // Make an AJAX request to the CreateCharacter endpoint
     $.ajax({
       url: "/create-character",
@@ -16,3 +18,5 @@
     });
   });
 });
+
+*/

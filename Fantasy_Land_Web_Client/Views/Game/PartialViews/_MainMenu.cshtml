@@ -11,8 +11,12 @@
 	<div id="main-menu-container">
 		<h1>Shadows of Distrea</h1>
 		<button id="play-game-btn">Play</button>
+		@*		<button id="create-character-btn">Create Character</button>*@
+@*		<button asp-controller="CreateCharacter" asp-action="CreateCharacter">Create Character</button>*@
+		<a class="nav-link text-dark" asp-area="" asp-controller="CreateCharacter" asp-action="Index">Create Character</a>
 	</div>
 
+	<script src="~/js/createcharacter.js"></script>
 	<script src="~/js/mainmenu.js"></script>
 
 </body>

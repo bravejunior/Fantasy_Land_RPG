@@ -22,7 +22,7 @@ namespace Fantasy_Land_Web_Client.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> IndexAsync()
+        public IActionResult Index()
         {
             var user = ViewData["CurrentUser"];
 

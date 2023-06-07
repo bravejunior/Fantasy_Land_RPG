@@ -1,0 +1,26 @@
+﻿@using Models.Entities._Ability
+@model List<Models.Entities._Ability.Attribute>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<link rel="stylesheet" href="~/css/chooseattributes.css" asp-append-version="true" />
+</head>
+
+
+<body>
+	@if (Model != null)
+	{
+		<div class="create-character-attribute-container">
+			@foreach (var i in Model)
+			{
+				@i.Name
+			}
+		</div>
+	}
+
+
+
+	<script type="module" src="~/js/shared-data.js"></script>
+	<script src="~/js/chooseattributes.js"></script>
+</body>

@@ -36,6 +36,8 @@ namespace Fantasy_Land_Web_Client
                 options.Filters.Add(typeof(CurrentUserActionFilter));
             });
 
+            //builder.Services.AddControllers();
+
             builder.Services.AddSingleton(jwtConfig);
             builder.Services.AddScoped<CurrentUserActionFilter>();
             builder.Services.AddScoped<IUserService, UserService>();

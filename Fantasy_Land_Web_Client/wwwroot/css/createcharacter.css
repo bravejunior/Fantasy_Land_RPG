@@ -1,0 +1,63 @@
+﻿#create-character-container {
+  width: 100%;
+}
+
+#create-portrait-container{
+  display:none;
+}
+
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 100;
+  color: rgb(255, 255, 255);
+  border: none;
+  background-color: inherit;
+  padding: 14px 28px;
+  font-size: 20px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.main-content {
+  grid-area: main-content;
+}
+
+.main-content-bot {
+  grid-area: main-content-bot;
+}
+
+.main-content-top {
+  grid-area: main-content-top;
+}
+
+.right-banner-mid {
+  grid-area: right-banner-mid;
+}
+
+.left-banner-mid {
+  grid-area: left-banner-mid;
+}
+
+.left-banner-top {
+  grid-area: left-banner-top;
+}
+
+.left-banner-bot {
+  grid-area: left-banner-bot;
+}
+
+.right-banner-bot {
+  grid-area: right-banner-bot;
+}
+
+.right-banner-top {
+  grid-area: right-banner-top;
+}
+
+@media only screen and (max-width: 300px) {
+}
+
+@media only screen and (min-width: 768px) {
+}
