@@ -1,4 +1,9 @@
-﻿<head>
+﻿@using Models.DTOs
+@model CreateCharacterDataDto
+
+
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="~/css/createcharacter.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/css/chooseprofession.css" asp-append-version="true" />
@@ -18,6 +23,7 @@
 			<div id="choose-profession-container"></div>
 			<div id="choose-portrait-container"></div>
 			<div id="choose-attributes-container"></div>
+			<div id="choose-capabilities-container"></div>
 		</div>
 
 		<div class="right-banner-mid"><div></div></div>
@@ -28,7 +34,15 @@
 	</div>
 
 	@section scripts {
-	<script type="module" src="~/js/shared-data.js"></script>
+		<script type="module" src="~/js/shared-data.js"></script>
+		<script>
+			var characterData = {
+				professions: @Html.Raw(Json.Serialize(Model.Professions)),
+				portraits: @Html.Raw(Json.Serialize(Model.Portraits)),
+				attributes: @Html.Raw(Json.Serialize(Model.Attributes)),
+				capabilities: @Html.Raw(Json.Serialize(Model.Capabilities)),
+			};
+		</script>
 		<script src="~/js/createcharacter.js"></script>
 	}
 	</body>

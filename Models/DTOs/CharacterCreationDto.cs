@@ -16,7 +16,6 @@ namespace Models.DTOs
 
         public virtual ICollection<PlayerCharacterCapability> PlayerCharacterCapabilities { get; set; }
         public virtual ICollection<PlayerCharacterAttribute> PlayerCharacterAttributes { get; set; }
-        public virtual ICollection<Ability> Skills { get; } = new List<Ability>();
 
         public virtual Faction? Faction { get; set; }
 

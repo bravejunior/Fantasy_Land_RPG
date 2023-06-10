@@ -1,24 +1,42 @@
 ﻿.create-character-portrait-container {
   display: grid;
   justify-content: center;
+  margin-bottom: 10em;
 }
 
 .portrait-slider {
   display: flex;
   align-items: center;
+  color: white;
 }
 
 .btn-left-portrait,
 .btn-right-portrait {
-  margin: 0 10px;
+  margin: 0 2em;
+  align-items: center;
+}
+
+img {
+  box-shadow: rgb(0, 0, 0) 0px 0px 40px 10px;
+  border-radius: 5em;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+  max-width: 250px;
 }
 
 h2 {
-  font-weight: 100;
-  text-align: center;
+  font-size: 1.5em;
+  font-weight: 300;
   margin-top: 0.5em;
   margin-bottom: 1em;
-  color: white;
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+hr {
+  margin-top: 3em;
 }
 
 /* img {

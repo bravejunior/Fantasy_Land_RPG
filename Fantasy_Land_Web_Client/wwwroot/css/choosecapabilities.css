@@ -1,0 +1,84 @@
+﻿body {
+  color: rgb(238, 238, 238);
+  font-family: "Playfair", serif;
+  font-weight: 100;
+}
+
+#create-character-capability-container {
+  display: grid;
+  justify-items: center;
+  margin-top: 5em;
+  margin-left: 3em;
+  margin-right: 3em;
+
+}
+
+.capability-value {
+  color: rgb(255, 211, 105);
+}
+
+.capability-grid {
+  display: grid;
+  /* grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); */
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 20px;
+  text-align: center;
+}
+
+.capability-container {
+  border: 1px solid #ccc;
+  padding: 20px;
+}
+
+.capability-name {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.capability-content {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin: 10px;
+}
+
+.arrow-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.decrease-btn {
+  color: red;
+}
+
+.increase-btn {
+  color: green;
+}
+
+.capability-value {
+  font-size: 18px;
+}
+
+.capability-desc {
+  font-size: 14px;
+  color: rgb(111, 121, 136);
+}
+
+
+@media only screen and (max-width: 1150px) {
+  .capability-grid {
+   grid-template-columns: 1fr 1fr;
+
+  }
+}
+
+@media only screen and (max-width: 610px) {
+  .capability-grid {
+
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}

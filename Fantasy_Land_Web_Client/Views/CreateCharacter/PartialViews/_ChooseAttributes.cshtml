@@ -3,21 +3,39 @@
 
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 	<link rel="stylesheet" href="~/css/chooseattributes.css" asp-append-version="true" />
 </head>
 
 
 <body>
-	@if (Model != null)
-	{
-		<div class="create-character-attribute-container">
-			@foreach (var i in Model)
-			{
-				@i.Name
-			}
-		</div>
-	}
+	<div id="create-character-attribute-container">
+		<h4 class="points-left">Points left: {{ totalPoints }}</h4>
+		@if (Model != null)
+		{
+			<div class="attribute-grid">
+
+				@foreach (var i in Model)
+				{
+					<div class="attribute-container">
+						<h3 class="attribute-name" data-attribute-name="@i.Name">@i.Name</h3>
+
+						<div class="attribute-content">
+							<button class="arrow-btn" v-on:click="decreaseValue('@i.Name')">&#10094;</button>
+							<div class="attribute-value" data-attribute-value="{{ attributes['@i.Name'] }}">{{ attributes['@i.Name'] }}</div>
+							<button class="arrow-btn" v-on:click="increaseValue('@i.Name')">&#10095;</button>
+						</div>
+
+						<div class="attribute-desc" data-attribute-desc="@i.Description">@i.Description</div>
+					</div>
+				}
+			</div>
+
+
+		}
+	</div>
+	<hr />
+	<button id="go-back-attr-btn">Go Back</button>
+	<button id="next-attr-btn">Next</button>
 
 
 

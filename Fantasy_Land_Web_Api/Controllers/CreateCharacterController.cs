@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models.DTOs;
 using Models.Entities._Profession;
 using Models.Images;
 
@@ -39,6 +40,21 @@ namespace Fantasy_Land_Web_Api.Controllers
         public List<Models.Entities._Ability.Attribute> GetAttributes()
         {
             return _dbContext.Attributes.ToList();
+        }
+
+        [HttpGet]
+        [Route("get-character-creation-data")]
+        public CreateCharacterDataDto GetCharacterCreationData()
+        {
+            var dto = new CreateCharacterDataDto
+            {
+                Attributes = _dbContext.Attributes.ToList(),
+                Professions = _dbContext.Professions.ToList(),
+                Portraits = _dbContext.Portraits.ToList(),
+                Capabilities = _dbContext.Capabilities.ToList(),
+            };
+
+            return dto;
         }
     }
 }

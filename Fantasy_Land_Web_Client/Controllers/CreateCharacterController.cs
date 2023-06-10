@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models.DTOs;
+using Models.Entities._Ability;
 using Models.Entities._Profession;
 using Models.Images;
 using System.Text.Json;
@@ -16,9 +17,21 @@ namespace Fantasy_Land_Web_Client.Controllers
             _httpClient = httpClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var dto = await GetCreateCharacterDataAsync();
+            return View(dto);
+        }
+
+        private async Task<CreateCharacterDataDto> GetCreateCharacterDataAsync()
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            HttpResponseMessage response = await _httpClient.GetAsync("api/createcharacter/get-character-creation-data");
+            string data = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<CreateCharacterDataDto>(data, options);
         }
 
         private async Task<List<Profession>> GetProfessionsAsync()
@@ -34,9 +47,8 @@ namespace Fantasy_Land_Web_Client.Controllers
 
 
         [Route("choose-portrait")]
-        public async Task<IActionResult> ChoosePortrait()
+        public IActionResult ChoosePortrait(List<Portrait> portraits)
         {
-            var portraits = await GetPortraits();
             var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 
             if (isAjax)
@@ -49,7 +61,7 @@ namespace Fantasy_Land_Web_Client.Controllers
             }
         }
 
-        private async Task<List<Portrait>> GetPortraits()
+        private async Task<List<Portrait>> GetPortraitsAsync()
         {
             var options = new JsonSerializerOptions
             {
@@ -61,9 +73,8 @@ namespace Fantasy_Land_Web_Client.Controllers
         }
 
         [Route("choose-attributes")]
-        public async Task<IActionResult> ChooseAttributes()
+        public IActionResult ChooseAttributes(List<Models.Entities._Ability.Attribute> attributes)
         {
-            var attributes = await GetAttributes();
             var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 
             if (isAjax)
@@ -76,7 +87,7 @@ namespace Fantasy_Land_Web_Client.Controllers
             }
         }
 
-        private async Task<List<Models.Entities._Ability.Attribute>> GetAttributes()
+        private async Task<List<Models.Entities._Ability.Attribute>> GetAttributesAsync()
         {
             var options = new JsonSerializerOptions
             {
@@ -85,18 +96,34 @@ namespace Fantasy_Land_Web_Client.Controllers
 
             HttpResponseMessage response = await _httpClient.GetAsync("api/createcharacter/get-attributes");
             string data = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<Models.Entities._Ability.Attribute>>(data, options);
+            var list = JsonSerializer.Deserialize<List<Models.Entities._Ability.Attribute>>(data, options);
+
+            return list;
         }
 
         [Route("choose-profession")]
-        public async Task<IActionResult> ChooseProfession()
+        public IActionResult ChooseProfession(List<Profession> professions)
         {
-            var professions = await GetProfessionsAsync();
             var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
 
             if (isAjax)
             {
                 return PartialView("/Views/CreateCharacter/PartialViews/_ChooseProfession.cshtml", professions);
+            }
+            else
+            {
+                return PartialView("_Error");
+            }
+        }
+
+        [Route("choose-capabilities")]
+        public IActionResult ChooseCapabilities(List<Capability> capabilities)
+        {
+            var isAjax = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
+            if (isAjax)
+            {
+                return PartialView("/Views/CreateCharacter/PartialViews/_ChooseCapabilities.cshtml", capabilities);
             }
             else
             {

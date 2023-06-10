@@ -12,8 +12,7 @@ namespace Models.Entities._Profession
         public int Id { get; set; }
         public int Level { get; set; }
         public int AttributePoints { get; set; }
-        public int AbilityId { get; set; }
-        public Ability Ability { get; set; }
+        public int SkillPoints { get; set; }
 
 
         public Profession Profession { get; set; }

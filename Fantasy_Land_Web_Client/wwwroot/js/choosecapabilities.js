@@ -4,42 +4,45 @@
   createApp({
     data() {
       return {
-        attributes: {},
-        minAttributeValue: 7,
-        maxAttributeValue: 21,
-        totalPoints: 20,
+        capabilities: {},
+        minCapabilityValue: 0,
+        maxCapabilityValue: 10,
+        totalPoints: 10,
       };
     },
     mounted() {
-      var attributeElements = document.getElementsByClassName("attribute-name");
-      var attributeName = "";
+      var capabilityElements =
+        document.getElementsByClassName("capability-name");
+      console.log(capabilityElements);
+      var capabilityName = "";
 
-      for (var i = 0; i < attributeElements.length; i++) {
-        var attributeElement = attributeElements[i];
-        attributeName = attributeElement.getAttribute("data-attribute-name");
-        this.attributes[attributeName] = 10;
+      for (var i = 0; i < capabilityElements.length; i++) {
+        var capabilityElement = capabilityElements[i];
+        capabilityName = capabilityElement.getAttribute("data-capability-name");
+        console.log(capabilityName);
+        this.capabilities[capabilityName] = 0;
       }
 
-      //   this.attributes = JSON.parse(@Html.Raw(Json.Serialize(Model)));
+      //   this.capabilitys = JSON.parse(@Html.Raw(Json.Serialize(Model)));
     },
     methods: {
-      decreaseValue(attributeName) {
-        if (this.attributes[attributeName] > this.minAttributeValue) {
-          this.attributes[attributeName]--;
+      decreaseValue(capabilityName) {
+        if (this.capabilities[capabilityName] > this.minCapabilityValue) {
+          this.capabilities[capabilityName]--;
           this.totalPoints++;
         }
       },
-      increaseValue(attributeName) {
+      increaseValue(capabilityName) {
         if (
-          this.attributes[attributeName] < this.maxAttributeValue &&
+          this.capabilities[capabilityName] < this.maxCapabilityValue &&
           this.totalPoints > 0
         ) {
-          this.attributes[attributeName]++;
+          this.capabilities[capabilityName]++;
           this.totalPoints--;
         }
       },
     },
-  }).mount("#create-character-attribute-container");
+  }).mount("#create-character-capability-container");
 
   $(document).on("click", "#next-attr-btn", function () {
     // Make an AJAX request to the MainMenu endpoint
@@ -50,7 +53,7 @@
         capabilities: window.characterData.capabilities,
       },
       success: function (response) {
-        $("#choose-attributes-container").hide();
+        $("#choose-capabilities-container").hide();
         $("#choose-capabilities-container").show();
         $("#choose-capabilities-container").html(response);
       },
@@ -69,7 +72,7 @@
         $("#choose-portrait-container").show();
         $("#choose-portrait-container").html(response);
 
-        $("#choose-attributes-container").hide();
+        $("#choose-capabilities-container").hide();
       },
       error: function (error) {
         console.log(error);

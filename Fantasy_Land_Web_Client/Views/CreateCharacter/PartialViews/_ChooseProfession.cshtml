@@ -17,7 +17,7 @@
 					@foreach (var profession in Model)
 					{
 						string base64String = Convert.ToBase64String(profession.Portrait);
-						<div class="profession-container">
+						<div class="profession-container" data-profession-name="@profession.Name">
 							<div class="create-character-profession-name">@char.ToUpper(@profession.Name[0])@profession.Name.Substring(1)</div>
 							<img class="create-character-profession-icon" src="data:image/png;base64,@base64String" alt="@profession.Name-image" data-profession-name="@profession.Name" />
 							<div id="create-character-profession-desc" data-description="@profession.Description.Substring(0, @profession.Description.IndexOf('.') + 1)">@profession.Description.Substring(0, @profession.Description.IndexOf('.') + 1)</div>

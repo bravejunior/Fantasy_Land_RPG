@@ -30,11 +30,17 @@ var slideIndex = 1;
 
 showDivs(slideIndex);
 
+var professions = window.characterData.professions;
+console.log(professions);
+
 $(document).on("click", "#go-back-port-btn", function () {
   // Make an AJAX request to the MainMenu endpoint
   $.ajax({
     url: "/choose-profession",
-    type: "GET",
+    type: "POST",
+    data: {
+      professions: professions,
+    },
     success: function (response) {
       // Update the main-menu-container with the MainMenu view
       $("#choose-profession-container").show();
@@ -42,7 +48,6 @@ $(document).on("click", "#go-back-port-btn", function () {
       // Clear the create-character-container
       $("#choose-portrait-container").empty();
       $("#choose-portrait-container").hide();
-      characterData.portrait_id = portraitid;
     },
     error: function (error) {
       console.log(error);
@@ -55,7 +60,10 @@ $(document).ready(function () {
     // Make an AJAX request to the MainMenu endpoint
     $.ajax({
       url: "/choose-attributes",
-      type: "GET",
+      type: "POST",
+      data: {
+        attributes: window.characterData.attributes,
+      },
       success: function (response) {
         $("#choose-portrait-container").hide();
         $("#choose-attributes-container").show();

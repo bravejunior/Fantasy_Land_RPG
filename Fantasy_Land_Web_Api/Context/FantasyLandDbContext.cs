@@ -24,7 +24,6 @@ namespace Fantasy_Land_Web_Api.Context
         public DbSet<PlayerCharacterSkill> PlayerCharacterSkills { get; set; }
         public DbSet<Capability> Capabilities { get; set; }
         public DbSet<Skill> Skills { get; set; }
-        public DbSet<Ability> Abilities { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<ItemLocation> ItemLocations { get; set; }
         public DbSet<ItemRequirement> ItemRequirements { get; set; }
@@ -58,14 +57,14 @@ namespace Fantasy_Land_Web_Api.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            modelBuilder.Entity<Ability>()
-                .HasOne(a => a.ProfessionProgression)
-                .WithOne(pp => pp.Ability)
-                .HasForeignKey<Ability>(a => a.ProfessionProgressionId)
-                .OnDelete(DeleteBehavior.Restrict);
-
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Skill>()
+                .HasOne(a => a.Profession)
+                .WithMany(pp => pp.Skills)
+                .HasForeignKey(a => a.ProfessionId)
+                .HasConstraintName("FK_Skills_Professions_ProfessionId")
+                .OnDelete(DeleteBehavior.NoAction);
 
             //modelBuilder.Entity<Profession>().HasData(new Profession { Id = 1, Name = "", Description = "" });
             //modelBuilder.Entity<Profession>().HasData(new Profession { Id = 1, Name = "", Description = "" });

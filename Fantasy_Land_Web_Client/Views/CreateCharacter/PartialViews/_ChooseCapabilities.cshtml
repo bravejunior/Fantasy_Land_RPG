@@ -1,0 +1,44 @@
+﻿@using Models.Entities._Ability
+@model List<Capability>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="~/css/choosecapabilities.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/choosecapabilities.css" asp-append-version="true" />
+</head>
+
+<body>
+	<div id="create-character-capability-container">
+		<h4 class="points-left">Points left: {{ totalPoints }}</h4>
+		@if (Model != null)
+		{
+			<div class="capability-grid">
+
+				@foreach (var i in Model)
+				{
+					<div class="capability-container">
+						<h3 class="capability-name" data-capability-name="@i.Name">@i.Name</h3>
+
+						<div class="capability-content">
+							<button class="arrow-btn" v-on:click="decreaseValue('@i.Name')">&#10094;</button>
+							<div class="capability-value" data-capability-value="{{ capabilities['@i.Name'] }}">{{ capabilities['@i.Name'] }}</div>
+							<button class="arrow-btn" v-on:click="increaseValue('@i.Name')">&#10095;</button>
+						</div>
+
+						<div class="capability-desc" data-attribute-desc="@i.Description">@i.Description</div>
+					</div>
+				}
+			</div>
+
+
+		}
+	</div>
+	<hr />
+	<button id="go-back-cap-btn">Go Back</button>
+	<button id="next-cap-btn">Next</button>
+
+
+
+	<script type="module" src="~/js/shared-data.js"></script>
+	<script src="~/js/choosecapabilities.js"></script>
+</body>

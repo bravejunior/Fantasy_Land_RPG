@@ -25,32 +25,33 @@ window.addEventListener("DOMContentLoaded", typeWriter());
 */
 // Call the typewriter function when the page loads
 
-
 function plusDivs(n) {
-  showDivs((si += n));
+  showDivs((slideIndex += n));
 }
 
 function showDivs(n) {
   var i;
   var x = document.getElementsByClassName("profession-container");
   if (n > x.length) {
-    si = 1;
+    slideIndex = 1;
   }
   if (n < 1) {
-    si = x.length;
+    slideIndex = x.length;
   }
   for (i = 0; i < x.length; i++) {
     x[i].style.display = "none";
   }
-  x[si - 1].style.display = "block";
-  currentProfessionContainer = x[si - 1];
+  x[slideIndex - 1].style.display = "block";
+
+  currentProfessionContainer = x[slideIndex - 1];
   if (currentProfessionContainer) {
     var professionName = currentProfessionContainer.querySelector(
       ".create-character-profession-name"
     );
-    characterData.profession = professionName.textContent;
+    window.selectedCharacterParameters.profession = professionName;
   }
 }
+
 var currentProfessionContainer = null;
 var si = 1;
 var currentPortraitContainer = null;
@@ -78,16 +79,15 @@ $(document).on("click", "#next-prof-btn", function () {
   // Make an AJAX request to the MainMenu endpoint
   $.ajax({
     url: "/choose-portrait",
-    type: "GET",
+    type: "POST",
+    data: {
+      portraits: window.characterData.portraits,
+    },
     success: function (response) {
-      chosenProfession = characterData.profession;
-
       $("#choose-portrait-container").show();
       $("#choose-portrait-container").html(response);
 
       $("#choose-profession-container").hide();
-
-      characterData.profession = chosenProfession;
     },
     error: function (error) {
       console.log(error);

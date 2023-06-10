@@ -23,7 +23,7 @@ namespace Models.Entities._Profession
 
         public virtual ICollection<ProfessionProgression> ProfessionProgression { get; set; }
         public virtual ICollection<PlayerCharacter> PlayerCharacters { get; set; }
-        public virtual ICollection<Ability> Abilities { get; set; }
+        public virtual ICollection<Skill> Skills { get; set; }
 
     }
 }
